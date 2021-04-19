@@ -12,6 +12,28 @@ const _nav = [
       text: 'NEW',
     }
   },
+  {
+    _tag: 'CSidebarNavDropdown',
+    name: 'Groups',
+    route: '/groups',
+    _children: [
+      {
+        _tag: 'CSidebarNavItem',
+        name: 'All Groups',
+        to: '/Groups/All'
+      },
+      {
+        _tag: 'CSidebarNavItem',
+        name: 'New Group',
+        to: '/Groups/Add'
+      },
+      {
+        _tag: 'CSidebarNavItem',
+        name: 'Edit Groups',
+        to: '/Groups/:id'
+      }
+    ]
+  }
 
 ]
 
