@@ -2,32 +2,42 @@ import React, { useEffect, useState } from "react";
 import db from "src/firebase";
 import AllGroups from "../views/Groups/All/allGroups";
 
-export default function GroupServices() {
-  const [group, setGroup] = useState([]);
-  useEffect(() => {
-    const getData = async () => {
-      await db
-        .collection("Groups")
-        .get()
-        .then((res) => {
-          var arr = [];
-          console.log(res);
-          res.forEach((e) => {
-            arr.push({
-              id: e.id,
-              data: e.data(),
-            });
-          });
-          setGroup(arr);
+export function getGroupData() {
+  return db
+    .collection("Groups")
+    .get()
+    .then((res) => {
+      var arr = [];
+      res.forEach((e) => {
+        arr.push({
+          id: e.id,
+          data: e.data(),
         });
-    };
-  }, []);
+      });
+      return arr;
+    });
+}
+// export default function GroupServices() {
+//   const [group, setGroup] = useState([]);
+//   useEffect(() => {
+//     getData();
+//   }, []);
 
-  for (let i = 0; i < group.length; i++) {
-    console.log(group[i].data);
-    console.log(group[i].id);
-  }
-
+  // const getData = async () => {
+  //   await db
+  //   .collection("Groups")
+  //   .get()
+  //   .then((res) => {
+  //     var arr = [];
+  //     res.forEach((e) => {
+  //       arr.push({
+  //         id: e.id,
+  //         data: e.data(),
+  //       });
+  //     });
+  //     setGroup(arr);
+  //   });
+  // };
   // const getData = () => {
   //     const resp = db.collection('Groups').get()
   //         .then(function (snapshot) {
@@ -40,9 +50,9 @@ export default function GroupServices() {
   //             console.log(groups);
   //         })
   // }
-  return (
-    <>
-      <AllGroups grp={group} />
-    </>
-  );
-}
+  // return (
+  //   <>
+  //     <AllGroups grp={group} />
+  //   </>
+  // );
+// }
