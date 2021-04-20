@@ -1,6 +1,9 @@
 import React from 'react';
+// import GroupServices from './Services/GroupServices';
 
+// const Groups = React.lazy(() => import('./Services/GroupServices'))
 const Groups = React.lazy(() => import('./views/Groups/All/allGroups'))
+
 const addGroups = React.lazy(() => import('./views/Groups/Add/AddGroup'))
 const editGroups = React.lazy(() => import('./views/Groups/Edit/EditGroup'))
 

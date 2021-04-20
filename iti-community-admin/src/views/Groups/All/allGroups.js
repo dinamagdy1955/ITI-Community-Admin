@@ -5,15 +5,17 @@ import {
   CCollapse,
   CDataTable,
 } from "@coreui/react";
-import React, { Suspense, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import GroupServices from "src/Services/GroupServices";
+import { getGroupData } from "src/Services/GroupServices";
 
-export default function AllGroups({ grp }) {
-  console.log(grp);
-
-  return <></>;
-
+export default function AllGroups() {
+  useEffect(() => {
+    const data = getGroupData().then((res) => {
+      console.log(res);
+    })
+  }, [])
+  return (<></>)
   // const usersData = [
   //     { id: 0, name: 'John Doe', registered: '2018/01/01', role: 'Guest', status: 'Pending' },
   //     { id: 1, name: 'Samppa Nori', registered: '2018/01/01', role: 'Member', status: 'Active' },
