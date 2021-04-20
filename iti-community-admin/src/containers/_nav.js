@@ -12,7 +12,24 @@ const _nav = [
       text: 'NEW',
     }
   },
+  {
+    _tag: 'CSidebarNavDropdown',
+    name: 'Jobs',
+    route: '/jobs',
+    icon: 'cil-puzzle',
+    _children: [
+      {
+        _tag: 'CSidebarNavItem',
+        name: 'Show Jobs',
+        to: '/jobs/showjobs',
+      },
+      {
+        _tag: 'CSidebarNavItem',
+        name: 'Add Job',
+        to: '/jobs/addjob',
+      }]
+    }
+  ]
 
-]
 
 export default _nav
