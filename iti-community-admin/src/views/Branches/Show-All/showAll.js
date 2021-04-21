@@ -46,6 +46,8 @@ export default function ShowAll() {
     return itm;
   }
 
+
+
   function Delete(id) {
     /*console.log('deleted')*/
     var x = prompt(

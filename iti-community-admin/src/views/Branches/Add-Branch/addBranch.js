@@ -67,6 +67,7 @@ export default function AddBranch() {
     return db.collection("Branches").add(Branch);
   };
 
+
   return (
     <>
       <h1>Branches</h1>
@@ -106,6 +107,7 @@ export default function AddBranch() {
           />
         </Form.Group>
 
+
         <Form.Row>
           <Form.Group controlId="formGridBTN" style={{ margin: "5px" }}>
             <Form.Label>NO.Tracks</Form.Label>
@@ -139,6 +141,24 @@ export default function AddBranch() {
               value={Branch.no_instructors}
             />
           </Form.Group>
+          {/* <Form.Group controlId="formGridCity">
+      <Form.Label>City</Form.Label>
+      <Form.Control />
+    </Form.Group>
+
+    <Form.Group controlId="formGridState">
+      <Form.Label>State</Form.Label>
+      <Form.Control as="select" defaultValue="Choose...">
+        <option>Choose...</option>
+        <option>...</option>
+      </Form.Control>
+    </Form.Group>
+
+    <Form.Group controlId="formGridZip">
+      <Form.Label>Zip</Form.Label>
+      <Form.Control />
+    </Form.Group> */}
+
         </Form.Row>
 
         <Button
