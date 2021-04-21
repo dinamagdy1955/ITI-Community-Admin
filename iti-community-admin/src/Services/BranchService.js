@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import db from "src/firebase";
+import { db } from "src/firebase";
 import ShowAll from "../views/Branches/Show-All/showAll";
 
 export default function BranchServices() {

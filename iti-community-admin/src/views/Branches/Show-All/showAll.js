@@ -10,8 +10,10 @@ import {
 import React from "react";
 import Button from "react-bootstrap/Button";
 import BranchServices from "src/Services/BranchService";
-
+import { useHistory } from "react-router";
 export default function ShowAll({ br }) {
+  const history = useHistory();
+  if (localStorage.getItem("adminToken") == undefined) history.push("/login");
   BranchServices();
   const usersData = [
     {

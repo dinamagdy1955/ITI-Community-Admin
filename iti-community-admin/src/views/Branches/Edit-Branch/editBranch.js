@@ -1,9 +1,10 @@
 import React from "react";
 import { Form, Button } from "react-bootstrap";
-
+import { useHistory } from "react-router";
 export default function EditBranch() {
   //EditBranch()
-
+  const history = useHistory();
+  if (localStorage.getItem("adminToken") == undefined) history.push("/login");
   return (
     <>
       <h1>Branches</h1>

@@ -10,61 +10,47 @@ import {
   CButton,
 } from "@coreui/react";
 
-export default function UsersRequests() {
+export default function DeleteReportedUsers() {
   const [users, setUsers] = React.useState([]);
   useEffect(() => {
-    var arr = [];
-    var l = [];
     db.collection("users-basics").onSnapshot((res) => {
-      arr = [];
-      l = [];
+      var arr = [];
+      var temp = [];
       setUsers([]);
       res.forEach((e) => {
-        if (!e.data().isAccepted && !e.data().isRemoved) {
+        if (e.data().isAccepted && e.data().isReported && !e.data().isRemoved) {
           db.collection("users-details")
             .doc(e.id)
             .onSnapshot((response) => {
+              console.log(response.data());
               let d = {
                 id: e.id,
                 name:
                   response.data().firstName + " " + response.data().lastName,
-                nationalID: response.data().nationalID,
-                track: response.data().track,
-                branch: response.data().branch,
                 email: e.data().email,
+                isReported: e.data().isReported,
+                reports: e.data().reports,
               };
               arr.push(d);
-              l = [...arr];
-              setUsers(l);
+              temp = [...arr];
+              setUsers(temp);
             });
         }
       });
     });
   }, []);
-  function acceptUserRequest(id) {
+  function removeReportedUsers(id) {
     db.collection("users-basics").doc(id).update({
-      isAccepted: true,
+      isRemoved: true,
     });
   }
-  function cancelUserRequest(id) {
-    db.collection("users-basics").doc(id).delete();
-    db.collection("users-details").doc(id).delete();
-  }
-  const fields = [
-    "name",
-    "nationalID",
-    "track",
-    "branch",
-    "email",
-    "Accept",
-    "Cancel",
-  ];
+  const fields = ["name", "email", "isReported", "reports", "Remove"];
   return (
     <>
       <CRow>
         <CCol xs="12" lg="12">
           <CCard>
-            <CCardHeader>Users Requests</CCardHeader>
+            <CCardHeader>Reported Users</CCardHeader>
             <CCardBody>
               <CDataTable
                 items={users}
@@ -72,7 +58,7 @@ export default function UsersRequests() {
                 itemsPerPage={5}
                 pagination
                 scopedSlots={{
-                  Accept: (item) => {
+                  Remove: (item) => {
                     return (
                       <td>
                         <CButton
@@ -80,24 +66,9 @@ export default function UsersRequests() {
                           variant="outline"
                           square
                           size="sm"
-                          onClick={() => acceptUserRequest(item.id)}
+                          onClick={() => removeReportedUsers(item.id)}
                         >
-                          Accept
-                        </CButton>
-                      </td>
-                    );
-                  },
-                  Cancel: (item) => {
-                    return (
-                      <td>
-                        <CButton
-                          color="primary"
-                          variant="outline"
-                          square
-                          size="sm"
-                          onClick={() => cancelUserRequest(item.id)}
-                        >
-                          Cancel
+                          Remove
                         </CButton>
                       </td>
                     );

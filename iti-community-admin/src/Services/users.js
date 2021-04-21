@@ -1,4 +1,4 @@
-import db from "src/firebase";
+import { db } from "src/firebase";
 
 export async function getUnAcceptedUsers() {
   return await db

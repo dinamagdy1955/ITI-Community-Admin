@@ -1,5 +1,5 @@
 // import React, { useEffect, useState } from "react";
-import db from "src/firebase";
+import { db } from "src/firebase";
 // import AllGroups from "../views/Groups/All/allGroups";
 
 export function getGroupData() {

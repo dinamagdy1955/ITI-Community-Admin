@@ -1,17 +1,17 @@
-
-import React from 'react'
+import React from "react";
 import { Form, Button } from "react-bootstrap";
-
+import { useHistory } from "react-router";
 export default function AddBranch() {
   //EditBranch()
-
+  const history = useHistory();
+  if (localStorage.getItem("adminToken") == undefined) history.push("/login");
 
   return (
     <>
       <h1>Branches</h1>
-      <h4>Add New One</h4><br></br>
+      <h4>Add New One</h4>
+      <br></br>
       <Form>
-
         <Form.Group controlId="formGridBName">
           <Form.Label>Name</Form.Label>
           <Form.Control type="text" placeholder="Enter Branch Name" />
@@ -21,9 +21,6 @@ export default function AddBranch() {
           <Form.Label>Address</Form.Label>
           <Form.Control type="text" placeholder="Enter Branch Adress" />
         </Form.Group>
-
-
-
 
         <Form.Row>
           <Form.Group controlId="formGridBTN" style={{ margin: "5px" }}>
@@ -57,16 +54,12 @@ export default function AddBranch() {
       <Form.Label>Zip</Form.Label>
       <Form.Control />
     </Form.Group> */}
-
         </Form.Row>
 
         <Button variant="primary" type="submit" style={{ margin: "10px" }}>
           Add
-  </Button>
+        </Button>
       </Form>
-
     </>
-  )
-
-
+  );
 }

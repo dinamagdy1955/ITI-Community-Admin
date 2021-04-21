@@ -7,10 +7,18 @@ const _nav = [
     name: "Dashboard",
     to: "/dashboard",
     icon: <CIcon name="cil-speedometer" customClasses="c-sidebar-nav-icon" />,
-    badge: {
-      color: "info",
-      text: "NEW",
-    },
+  },
+  {
+    _tag: "CSidebarNavDropdown",
+    name: "Admins",
+    route: "/admins",
+    _children: [
+      {
+        _tag: "CSidebarNavItem",
+        name: "Unaccepted Admins",
+        to: "/admins/unaccepted",
+      },
+    ],
   },
   {
     _tag: "CSidebarNavDropdown",
@@ -19,13 +27,13 @@ const _nav = [
     _children: [
       {
         _tag: "CSidebarNavItem",
-        name: "All Users",
-        to: "/users/all",
+        name: "Unaccepted Users",
+        to: "/users/requests",
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Delete User",
-        to: "/users/delete",
+        name: "Delete Reported Users",
+        to: "/users/deleteReported",
       },
     ],
   },
@@ -112,6 +120,33 @@ const _nav = [
         _tag: "CSidebarNavItem",
         name: "Add Job",
         to: "/jobs/addjob",
+      },
+    ],
+  },
+  {
+    _tag: "CSidebarNavDropdown",
+    name: "Pages",
+    route: "/pages",
+    _children: [
+      {
+        _tag: "CSidebarNavItem",
+        name: "Login",
+        to: "/login",
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Register",
+        to: "/register",
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Error 404",
+        to: "/404",
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Error 500",
+        to: "/500",
       },
     ],
   },
