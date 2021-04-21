@@ -1,9 +1,9 @@
 import {
-  // CBadge,
   CButton,
   CCardBody,
   CCollapse,
   CDataTable,
+  CImg,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -11,23 +11,20 @@ import { delGroup, getGroupData } from "src/Services/GroupServices";
 
 export default function AllGroups() {
   const [group, setGroup] = useState([])
-  var arr = []
-  var data = []
+
 
   useEffect(() => {
     getGroupData().onSnapshot((res) => {
-      data = []
-      arr = []
+      var arr = []
+      var data = []
       res.forEach((e) => {
-        console.log(e.data())
         data.push({
           id: e.id,
           data: e.data()
         })
       })
 
-      data.map((g, i) => {
-        console.log(g);
+      data.map(g => {
         var day = new Date(g.data.createdDate * 1000).getDate();
         var month = new Date(g.data.createdDate * 1000).getMonth()
         var year = new Date(g.data.createdDate * 1000).getFullYear() - 1969
@@ -37,17 +34,17 @@ export default function AllGroups() {
           About: g.data.About,
           membersNo: g.data.members.length,
           members: g.data.members,
-          URL: g.data.imgURL,
+          URL: g.data.ImgURL,
           CreatedAt: day + "-" + month + "-" + year
         })
         let viewData = [...arr]
         setGroup(viewData)
+        return true
       })
     })
 
   }, [])
 
-  console.log(group)
 
   const [details, setDetails] = useState([])
 
@@ -75,24 +72,23 @@ export default function AllGroups() {
     }
   ]
 
-
   function deleteGroup(id) {
     delGroup(id)
   }
 
-
   return (
     <>
-
       <CDataTable
         items={group}
         fields={fields}
         columnFilter
         tableFilter
         itemsPerPageSelect
-        itemsPerPage={10}
+        itemsPerPage={5}
         hover
         sorter
+        border
+        addTableClasses="CustomTable"
         pagination
         scopedSlots={{
           'show_details':
@@ -115,12 +111,20 @@ export default function AllGroups() {
             (item, index) => {
               return (
                 <CCollapse show={details.includes(index)}>
-                  <CCardBody>
-                    <h4>
-                      {/* {item.Name} */}
-                    </h4>
-
-                    <p className="text-muted">User since: { }</p>
+                  <CCardBody className="container text-center">
+                    {
+                      item.URL === '' ? <CImg
+                        src="http://via.placeholder.com/400x400/"
+                        width="400"
+                        className="mb-2"
+                      /> : <CImg
+                        src={item.URL}
+                        width="400"
+                        className="mb-2"
+                      />
+                    }
+                    <h6>About This Group:</h6>
+                    <p className="text-muted">{item.About}</p>
                     <Link to={`/Groups/${item.id}`}>
                       <CButton size="sm" color="info">
                         Edit
