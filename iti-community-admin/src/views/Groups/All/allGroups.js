@@ -7,15 +7,27 @@ import {
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getGroupData } from "src/Services/GroupServices";
+import { delGroup, getGroupData } from "src/Services/GroupServices";
 
 export default function AllGroups() {
   const [group, setGroup] = useState([])
   var arr = []
+  var data = []
 
   useEffect(() => {
-    getGroupData().then((res) => {
-      res.map((g, i) => {
+    getGroupData().onSnapshot((res) => {
+      data = []
+      arr = []
+      res.forEach((e) => {
+        console.log(e.data())
+        data.push({
+          id: e.id,
+          data: e.data()
+        })
+      })
+
+      data.map((g, i) => {
+        console.log(g);
         var day = new Date(g.data.createdDate * 1000).getDate();
         var month = new Date(g.data.createdDate * 1000).getMonth()
         var year = new Date(g.data.createdDate * 1000).getFullYear() - 1969
@@ -23,14 +35,19 @@ export default function AllGroups() {
           id: g.id,
           Name: g.data.Name,
           About: g.data.About,
-          members: g.data.members.length,
+          membersNo: g.data.members.length,
+          members: g.data.members,
           URL: g.data.imgURL,
           CreatedAt: day + "-" + month + "-" + year
         })
+        let viewData = [...arr]
+        setGroup(viewData)
       })
     })
-    setGroup(arr)
+
   }, [])
+
+  console.log(group)
 
   const [details, setDetails] = useState([])
 
@@ -48,7 +65,7 @@ export default function AllGroups() {
   const fields = [
     { key: 'Name', _style: { width: '40%' } },
     'CreatedAt',
-    { key: 'members', _style: { width: '20%' } },
+    { key: 'membersNo', _style: { width: '20%' } },
     {
       key: 'show_details',
       label: '',
@@ -57,6 +74,12 @@ export default function AllGroups() {
       filter: false
     }
   ]
+
+
+  function deleteGroup(id) {
+    delGroup(id)
+  }
+
 
   return (
     <>
@@ -103,7 +126,7 @@ export default function AllGroups() {
                         Edit
                       </CButton>
                     </Link>
-                    <CButton size="sm" color="danger" className="ml-1">
+                    <CButton size="sm" color="danger" className="ml-1" onClick={() => deleteGroup(item.id)}>
                       Delete
                     </CButton>
                   </CCardBody>
