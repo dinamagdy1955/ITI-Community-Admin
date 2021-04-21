@@ -9,8 +9,10 @@ import {
   CDataTable,
   CButton,
 } from "@coreui/react";
-
+import { useHistory } from "react-router";
 export default function UsersRequests() {
+  const history = useHistory();
+  if (localStorage.getItem("adminToken") == undefined) history.push("/login");
   const [users, setUsers] = React.useState([]);
   useEffect(() => {
     var arr = [];
@@ -19,26 +21,29 @@ export default function UsersRequests() {
       arr = [];
       l = [];
       setUsers([]);
-      res.forEach((e) => {
-        if (!e.data().isAccepted && !e.data().isRemoved) {
-          db.collection("users-details")
-            .doc(e.id)
-            .onSnapshot((response) => {
-              let d = {
-                id: e.id,
-                name:
-                  response.data().firstName + " " + response.data().lastName,
-                nationalID: response.data().nationalID,
-                track: response.data().track,
-                branch: response.data().branch,
-                email: e.data().email,
-              };
-              arr.push(d);
-              l = [...arr];
-              setUsers(l);
-            });
-        }
-      });
+      console.log(res.docs.length);
+      if (res.docs.length != 0) {
+        res.forEach((e) => {
+          if (!e.data().isAccepted && !e.data().isRemoved) {
+            db.collection("users-details")
+              .doc(e.id)
+              .onSnapshot((response) => {
+                let d = {
+                  id: e.id,
+                  name:
+                    response.data().firstName + " " + response.data().lastName,
+                  nationalID: response.data().nationalID,
+                  track: response.data().track,
+                  branch: response.data().branch,
+                  email: e.data().email,
+                };
+                arr.push(d);
+                l = [...arr];
+                setUsers(l);
+              });
+          }
+        });
+      }
     });
   }, []);
   function acceptUserRequest(id) {

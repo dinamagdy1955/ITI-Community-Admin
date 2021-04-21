@@ -9,8 +9,10 @@ import {
   CDataTable,
   CButton,
 } from "@coreui/react";
-
+import { useHistory } from "react-router";
 export default function DeleteReportedUsers() {
+  const history = useHistory();
+  if (localStorage.getItem("adminToken") == undefined) history.push("/login");
   const [users, setUsers] = React.useState([]);
   useEffect(() => {
     db.collection("users-basics").onSnapshot((res) => {
