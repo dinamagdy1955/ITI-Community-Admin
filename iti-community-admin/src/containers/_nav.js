@@ -98,6 +98,23 @@ const _nav = [
       },
     ],
   },
+  {
+    _tag: "CSidebarNavDropdown",
+    name: "Jobs",
+    route: "/jobs",
+    _children: [
+      {
+        _tag: "CSidebarNavItem",
+        name: "Show Jobs",
+        to: "/jobs/showjobs",
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Add Job",
+        to: "/jobs/addjob",
+      },
+    ],
+  },
   //////////////////////////////
 ];
 

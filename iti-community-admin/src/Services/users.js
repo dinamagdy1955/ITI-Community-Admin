@@ -1,7 +1,6 @@
 import db from "src/firebase";
 
 export async function getUnAcceptedUsers() {
-  // return db.collection("users-basics").onSnapshot
   return await db
     .collection("users-basics")
     .get()
@@ -28,14 +27,8 @@ export async function getUnAcceptedUsers() {
               };
               arr.push(d);
             });
-          //console.log(arr);
         }
-        console.log(arr[0]);
       });
-      console.log(arr);
-      //   arr.map((u) => {
-      //     console.log(u);
-      //   });
       return arr;
     });
 }
