@@ -7,6 +7,7 @@ export default function AllGroups() {
   const history = useHistory();
   if (localStorage.getItem("adminToken") == undefined) history.push("/login");
   const [group, setGroup] = useState([]);
+
   useEffect(() => {
     getGroupData().onSnapshot((res) => {
       var arr = [];
@@ -21,6 +22,7 @@ export default function AllGroups() {
       data.map((g) => {
         var day = new Date(g.data.createdDate * 1000).getDate();
         var month = new Date(g.data.createdDate * 1000).getMonth() + 1;
+
         var year = new Date(g.data.createdDate * 1000).getFullYear() - 1969;
         arr.push({
           id: g.id,

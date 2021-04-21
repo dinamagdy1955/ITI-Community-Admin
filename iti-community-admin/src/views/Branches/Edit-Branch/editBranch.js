@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense, useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import { useHistory } from "react-router";
 export default function EditBranch() {
@@ -36,23 +36,6 @@ export default function EditBranch() {
             <Form.Label>NO.Instructors</Form.Label>
             <Form.Control type="number" placeholder="Instructors" />
           </Form.Group>
-          {/* <Form.Group controlId="formGridCity">
-      <Form.Label>City</Form.Label>
-      <Form.Control />
-    </Form.Group>
-
-    <Form.Group controlId="formGridState">
-      <Form.Label>State</Form.Label>
-      <Form.Control as="select" defaultValue="Choose...">
-        <option>Choose...</option>
-        <option>...</option>
-      </Form.Control>
-    </Form.Group>
-
-    <Form.Group controlId="formGridZip">
-      <Form.Label>Zip</Form.Label>
-      <Form.Control />
-    </Form.Group> */}
         </Form.Row>
 
         <Button variant="primary" type="submit" style={{ margin: "10px" }}>

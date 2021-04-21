@@ -16,7 +16,7 @@ import {
 } from "@coreui/react";
 import { db, auth } from "src/firebase";
 import CIcon from "@coreui/icons-react";
-
+import { Link } from "react-router-dom";
 const Login = () => {
   const history = useHistory();
   const [admin, setAdmin] = useState({
@@ -133,9 +133,16 @@ const Login = () => {
                       sed do eiusmod tempor incididunt ut labore et dolore magna
                       aliqua.
                     </p>
-                    {/* <Link to="/register">
-                      <CButton color="primary" className="mt-3" active tabIndex={-1}>Register Now!</CButton>
-                    </Link> */}
+                    <Link to="/register">
+                      <CButton
+                        color="primary"
+                        className="mt-3"
+                        active
+                        tabIndex={-1}
+                      >
+                        Register Now!
+                      </CButton>
+                    </Link>
                   </div>
                 </CCardBody>
               </CCard>

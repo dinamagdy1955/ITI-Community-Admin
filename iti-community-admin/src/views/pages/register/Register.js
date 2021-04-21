@@ -14,8 +14,9 @@ import {
   CRow,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-
+import { useHistory } from "react-router";
 const Register = () => {
+  const history = useHistory();
   const [admin, setAdmin] = useState({
     firstName: "",
     lastName: "",
@@ -87,6 +88,7 @@ const Register = () => {
         password: admin.password,
         isAccepted: false,
       });
+      history.push("/login");
     } catch (error) {
       console.log(error);
     }

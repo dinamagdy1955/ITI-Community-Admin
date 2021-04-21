@@ -1,9 +1,11 @@
 import { Form, Button } from "react-bootstrap";
-import React from "react";
+import React, { Suspense, useState } from "react";
 
+import { useHistory } from "react-router";
 export default function EditTrack() {
   //EditTrack()
-
+  const history = useHistory();
+  if (localStorage.getItem("adminToken") == undefined) history.push("/login");
   return (
     <>
       <h1>Tracks</h1>
