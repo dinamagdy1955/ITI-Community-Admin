@@ -1,5 +1,5 @@
 // import React, { useEffect, useState } from "react";
-// import db from "src/firebase";
+import db from "src/firebase";
 // import AllGroups from "../views/Groups/All/allGroups";
 
 export function getGroupData() {
@@ -16,17 +16,13 @@ export function getGroupData() {
   //     });
   //     return arr;
   //   });
-  return db
-    .collection("Groups")
-
+  return db.collection("Groups");
 }
 
 export function addNewGroup(data) {
-  return db
-    .collection("Groups").add(data)
+  return db.collection("Groups").add(data);
 }
 
 export function delGroup(id) {
   return db.collection("Groups").doc(id).delete();
 }
-
