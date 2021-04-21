@@ -46,6 +46,8 @@ const AddGroup = () => {
           ImgURL: e.target.value,
         });
         break;
+      default:
+        break;
     }
   };
   const addNew = () => {

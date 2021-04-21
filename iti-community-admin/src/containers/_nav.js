@@ -52,11 +52,7 @@ const _nav = [
         name: "New Group",
         to: "/Groups/Add",
       },
-      {
-        _tag: "CSidebarNavItem",
-        name: "Edit Groups",
-        to: "/Groups/:id",
-      },
+
     ],
   },
   //////////////////////////////////////

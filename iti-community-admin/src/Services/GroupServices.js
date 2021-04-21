@@ -1,6 +1,4 @@
-// import React, { useEffect, useState } from "react";
 import { db } from "src/firebase";
-// import AllGroups from "../views/Groups/All/allGroups";
 
 export function getGroupData() {
   // return db
@@ -25,4 +23,8 @@ export function addNewGroup(data) {
 
 export function delGroup(id) {
   return db.collection("Groups").doc(id).delete();
+}
+
+export function EditGroup() {
+  return db.collection("Groups");
 }
