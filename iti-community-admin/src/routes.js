@@ -25,6 +25,8 @@ const EditTrack = React.lazy(() =>
   import("./views/Tracks/Edit-Track/EditTrack")
 );
 const AddTrack = React.lazy(() => import("./views/Tracks/Add-Track/AddTrack"));
+const ShowJobs = React.lazy(() => import("./../src/views/jobs/showJobs"));
+const AddJob = React.lazy(() => import("./../src/views/jobs/addJob"));
 
 const routes = [
   { path: "/", exact: true, name: "Home" },
@@ -44,6 +46,14 @@ const routes = [
   { path: "/tracks/Show-Tracks", name: "Show Tracks", component: ShowTracks },
   { path: "/tracks/Add-Track", name: "Add Track", component: AddTrack },
   { path: "/tracks/Edit-Track", name: "Edit Track", component: EditTrack },
+
+  {
+    path: "/jobs/showjobs",
+    exact: true,
+    name: "Show Jobs",
+    component: ShowJobs,
+  },
+  { path: "/jobs/addjob", exact: true, name: "Add Jobs", component: AddJob },
 ];
 
 export default routes;

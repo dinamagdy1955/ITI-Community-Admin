@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import db from "src/firebase";
 import {
-  CBadge,
   CCard,
   CCardBody,
   CCardHeader,
@@ -10,24 +9,24 @@ import {
   CDataTable,
   CButton,
 } from "@coreui/react";
-import CIcon from "@coreui/icons-react";
-import { getUnAcceptedUsers } from "src/Services/users";
 
 export default function UsersRequests() {
   var arr = [];
   var l = [];
+
   const [users, setUsers] = React.useState([]);
   useEffect(() => {
     db.collection("users-basics").onSnapshot((res) => {
+      arr = [];
       res.forEach((e) => {
-        if (e.data().isAccepted == false) {
+        if (!e.data().isAccepted && !e.data().isRemoved) {
           db.collection("users-details")
             .doc(e.id)
             .onSnapshot((response) => {
               //   console.log(e.id);
               //   console.log(e.data());
               //   console.log(response.data());
-
+              console.log(response.data());
               let d = {
                 id: e.id,
                 name:
@@ -38,8 +37,8 @@ export default function UsersRequests() {
                 email: e.data().email,
               };
               arr.push(d);
-              console.log(arr);
               l = [...arr];
+              console.log(l);
               setUsers(l);
               console.log(users);
             });
@@ -48,9 +47,25 @@ export default function UsersRequests() {
     });
     // setUsers(arr);
   }, []);
-  function acceptUserRequest() {}
-  function cancelUserRequest() {}
-  const fields = ["name", "nationalID", "track", "branch", "email"];
+  function acceptUserRequest(id) {
+    db.collection("users-basics").doc(id).update({
+      isAccepted: true,
+    });
+  }
+  function cancelUserRequest(id) {
+    db.collection("users-basics").doc(id).update({
+      isRemoved: true,
+    });
+  }
+  const fields = [
+    "name",
+    "nationalID",
+    "track",
+    "branch",
+    "email",
+    "Accept",
+    "Cancel",
+  ];
   return (
     <>
       <CRow>
@@ -63,6 +78,38 @@ export default function UsersRequests() {
                 fields={fields}
                 itemsPerPage={5}
                 pagination
+                scopedSlots={{
+                  Accept: (item) => {
+                    return (
+                      <td>
+                        <CButton
+                          color="primary"
+                          variant="outline"
+                          square
+                          size="sm"
+                          onClick={() => acceptUserRequest(item.id)}
+                        >
+                          Accept
+                        </CButton>
+                      </td>
+                    );
+                  },
+                  Cancel: (item) => {
+                    return (
+                      <td>
+                        <CButton
+                          color="primary"
+                          variant="outline"
+                          square
+                          size="sm"
+                          onClick={() => cancelUserRequest(item.id)}
+                        >
+                          Cancel
+                        </CButton>
+                      </td>
+                    );
+                  },
+                }}
               />
             </CCardBody>
           </CCard>
