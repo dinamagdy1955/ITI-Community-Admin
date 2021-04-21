@@ -1,9 +1,15 @@
 import React from "react";
+const Dashboard = React.lazy(() => import("./views/dashboard/Dashboard"));
 // import GroupServices from './Services/GroupServices';
+const UnAcceptAdmin = React.lazy(() =>
+  import("./views/Admins/unacceptAdmin/unAcceptAdmin")
+);
 const Users = React.lazy(() =>
   import("./views/Users/usersRequests/usersRequests")
 );
-
+const deleteReportedUsers = React.lazy(() =>
+  import("./views/Users/deleteReport/deleteReportedUsers")
+);
 // const Groups = React.lazy(() => import('./Services/GroupServices'))
 const Groups = React.lazy(() => import("./views/Groups/All/allGroups"));
 
@@ -25,12 +31,19 @@ const EditTrack = React.lazy(() =>
   import("./views/Tracks/Edit-Track/EditTrack")
 );
 const AddTrack = React.lazy(() => import("./views/Tracks/Add-Track/AddTrack"));
-const ShowJobs = React.lazy(() => import("./../src/views/jobs/showJobs"));
-const AddJob = React.lazy(() => import("./../src/views/jobs/addJob"));
+const ShowJobs = React.lazy(() => import("./views/jobs/All/showJobs"));
+const AddJob = React.lazy(() => import("./views/jobs/Add/addJob"));
 
 const routes = [
   { path: "/", exact: true, name: "Home" },
-  { path: "/users/all", name: "Users", component: Users },
+  { path: "/dashboard", name: "Dashboard", component: Dashboard },
+  { path: "/admins/unaccepted", name: "Admins", component: UnAcceptAdmin },
+  { path: "/users/requests", name: "Users", component: Users },
+  {
+    path: "/users/deleteReported",
+    name: "Delete Reported Users",
+    component: deleteReportedUsers,
+  },
   { path: "/groups/All", name: "Groups", component: Groups },
   { path: "/groups/Add", name: "Add Group", component: addGroups },
   { path: "/groups/:id", name: "Edit Group", component: editGroups },
