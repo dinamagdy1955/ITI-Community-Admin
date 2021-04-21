@@ -1,186 +1,100 @@
 import {
-  CBadge,
   CCard,
   CCardBody,
   CCardHeader,
   CCol,
   CDataTable,
   CRow,
+  CButton,
 } from "@coreui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "react-bootstrap/Button";
-import BranchServices from "src/Services/BranchService";
+import { db } from "src/firebase";
+import { Link } from "react-router-dom";
+import { useHistory } from "react-router";
+export default function ShowAll() {
+  const history = useHistory();
+  if (localStorage.getItem("adminToken") == undefined) history.push("/login");
+  var arr = [];
+  var l = [];
+  const [branch, setBranch] = React.useState([]);
+  useEffect(() => {
+    db.collection("Branches").onSnapshot((res) => {
+      arr = [];
+      res.forEach((e) => {
+        console.log(e.data());
+        let d = {
+          id: e.id,
+          name: e.data().name,
+          location: e.data().location,
+          no_tracks: e.data().no_tracks,
+          no_students: e.data().no_students,
+          no_instructors: e.data().no_instructors,
+          manager: e.data().manager,
+        };
+        arr.push(d);
+        l = [...arr];
+        console.log(l);
+        setBranch(l);
+        console.log(branch);
+      });
+    });
+  }, []);
 
-export default function ShowAll({ br }) {
-  BranchServices();
-  const usersData = [
-    {
-      id: 0,
-      name: "John Doe",
-      Adress: "2018/01/01",
-      NO_Tracks: "Guest",
-      NO_Students: "Pending",
-      NO_Instructors: "Guest",
-      Manager: "bni",
-    },
-    {
-      id: 1,
-      name: "Samppa Nori",
-      Adress: "2018/01/01",
-      NO_Tracks: "Member",
-      NO_Students: "Active",
-      NO_Instructors: "Guest",
-      Manager: "bni",
-    },
-    {
-      id: 2,
-      name: "Estavan Lykos",
-      Adress: "2018/02/01",
-      NO_Tracks: "Staff",
-      NO_Students: "Banned",
-      NO_Instructors: "Guest",
-      Manager: "bni",
-    },
-    {
-      id: 3,
-      name: "Chetan Mohamed",
-      Adress: "2018/02/01",
-      NO_Tracks: "Admin",
-      NO_Students: "Inactive",
-      NO_Instructors: "Guest",
-      Manager: "bni",
-    },
-    {
-      id: 4,
-      name: "Derick Maximinus",
-      Adress: "2018/03/01",
-      NO_Tracks: "Member",
-      NO_Students: "Pending",
-      NO_Instructors: "Guest",
-      Manager: "bni",
-    },
-    {
-      id: 5,
-      name: "Friderik Dávid",
-      Adress: "2018/01/21",
-      NO_Tracks: "Staff",
-      NO_Students: "Active",
-      NO_Instructors: "Guest",
-      Manager: "bni",
-    },
-    {
-      id: 6,
-      name: "Yiorgos Avraamu",
-      Adress: "2018/01/01",
-      NO_Tracks: "Member",
-      NO_Students: "Active",
-      NO_Instructors: "Guest",
-      Manager: "bni",
-    },
-    {
-      id: 7,
-      name: "Friderik Dávid",
-      Adress: "2018/01/21",
-      NO_Tracks: "Staff",
-      NO_Students: "Active",
-      NO_Instructors: "Guest",
-      Manager: "bni",
-    },
-    {
-      id: 8,
-      name: "Yiorgos Avraamu",
-      Adress: "2018/01/01",
-      NO_Tracks: "Member",
-      NO_Students: "Active",
-      NO_Instructors: "Guest",
-      Manager: "bni",
-    },
-    {
-      id: 9,
-      name: "Friderik Dávid",
-      Adress: "2018/01/21",
-      NO_Tracks: "Staff",
-      NO_Students: "Active",
-      NO_Instructors: "Guest",
-      Manager: "bni",
-    },
-    {
-      id: 10,
-      name: "Yiorgos Avraamu",
-      Adress: "2018/01/01",
-      NO_Tracks: "Member",
-      NO_Students: "Active",
-      NO_Instructors: "Guest",
-      Manager: "bni",
-    },
+  function getBranchData(itm) {
+    console.log(itm);
+    return itm;
+  }
 
-    {
-      id: 11,
-      name: "Ford Prefect",
-      Adress: "2001/05/25",
-      NO_Tracks: "Alien",
-      NO_Students: "Don't panic!",
-      NO_Instructors: "Guest",
-      Manager: "bni",
-    },
-  ];
-  const getBadge = (NO_Students) => {
-    switch (NO_Students) {
-      case "Active":
-        return "success";
-      case "Inactive":
-        return "secondary";
-      case "Pending":
-        return "warning";
-      case "Banned":
-        return "danger";
-      default:
-        return "primary";
+  function Delete(id) {
+    /*console.log('deleted')*/
+    var x = prompt(
+      `are you sure you want to delete the Branch with id : ${id}`
+    );
+    console.log(x);
+    if (x != null) {
+      db.collection("Branches").doc(id).delete();
     }
-  };
+  }
 
   const fields = [
     "name",
-    "Adress",
-    "NO_Tracks",
-    "NO_Students",
-    "NO_Instructors",
-    "Manager",
-    "Edit_Delete",
+    "location",
+    "no_tracks",
+    "no_students",
+    "no_instructors",
+    "manager",
+    "Delete",
   ];
-  //console.log(br)
+
   return (
     <>
-      <h1>firebase data</h1>
-      {console.log(br)}
       <CRow>
         <CCol>
           <CCard>
             <CCardHeader>Branches</CCardHeader>
             <CCardBody>
               <CDataTable
-                items={usersData}
+                items={branch}
                 fields={fields}
                 hover
                 striped
                 bordered
                 size="sm"
-                itemsPerPage={10}
+                itemsPerPage={5}
                 pagination
                 scopedSlots={{
-                  NO_Students: (item) => (
+                  Delete: (item) => (
                     <td>
-                      <CBadge color={getBadge(item.NO_Students)}>
-                        {item.NO_Students}
-                      </CBadge>
-                    </td>
-                  ),
-                }}
-                scopedSlots={{
-                  Edit_Delete: (item) => (
-                    <td>
-                      <Button variant="success">Edit</Button>{" "}
-                      <Button variant="danger">Delete</Button>{" "}
+                      <Button variant="danger" onClick={() => Delete(item.id)}>
+                        Delete
+                      </Button>{" "}
+                      <Link
+                        to="/branches/Edit-Branche"
+                        onClick={() => getBranchData(item)}
+                      >
+                        <Button variant="success">Edit</Button>
+                      </Link>
                     </td>
                   ),
                 }}
@@ -192,3 +106,4 @@ export default function ShowAll({ br }) {
     </>
   );
 }
+/* <Button variant="success" onClick={() => Edit(item.id)}>Edit</Button>{' '} */

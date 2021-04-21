@@ -1,110 +1,151 @@
-import React, { useEffect, useState } from 'react'
-import { CButton, CCardFooter, CForm, CFormGroup, CInput, CLabel, CTextarea } from '@coreui/react'
-import { useHistory, useParams } from 'react-router'
-import { getGroupData } from 'src/Services/GroupServices'
+import React, { useEffect, useState } from "react";
+import {
+  CButton,
+  CCardFooter,
+  CForm,
+  CFormGroup,
+  CInput,
+  CLabel,
+  CTextarea,
+} from "@coreui/react";
+import { useHistory, useParams } from "react-router";
+import { getGroupData } from "src/Services/GroupServices";
 
 const EditGroup = () => {
-    const { id } = useParams()
-    const [Group, setGroup] = useState({
-        Name: "",
-        About: "",
-        ImgURL: "",
-        // admin: [''],
-        // members: [''],
-        // subscriber: [''],
-    })
+  const history = useHistory();
+  if (localStorage.getItem("adminToken") == undefined) history.push("/login");
+  const { id } = useParams();
+  const [Group, setGroup] = useState({
+    Name: "",
+    About: "",
+    ImgURL: "",
+    // admin: [''],
+    // members: [''],
+    // subscriber: [''],
+  });
 
-    useEffect(() => {
-        const ref = getGroupData().doc(id).get();
-        ref.then((doc) => {
-            if (doc.exists) {
-                const data = doc.data()
-                setGroup({
-                    Name: data.Name,
-                    About: data.About,
-                    ImgURL: data.ImgURL
-                })
-            } else {
-                console.log('Not Founded')
-            }
-        })
-    }, [])
+  useEffect(() => {
+    const ref = getGroupData().doc(id).get();
+    ref.then((doc) => {
+      if (doc.exists) {
+        const data = doc.data();
+        setGroup({
+          Name: data.Name,
+          About: data.About,
+          ImgURL: data.ImgURL,
+        });
+      } else {
+        console.log("Not Founded");
+      }
+    });
+  }, []);
 
+  const handleForm = (e) => {
+    switch (e.target.name) {
+      case "Name":
+        setGroup({
+          ...Group,
+          Name: e.target.value,
+        });
+        break;
 
-    const handleForm = (e) => {
-        switch (e.target.name) {
-            case "Name":
-                setGroup({
-                    ...Group,
-                    Name: e.target.value
-                })
-                break;
-
-            case "About":
-                setGroup({
-                    ...Group,
-                    About: e.target.value
-                })
-                break;
-            case "URL":
-                setGroup({
-                    ...Group,
-                    ImgURL: e.target.value
-                })
-                break;
-            default:
-                break;
-        }
+      case "About":
+        setGroup({
+          ...Group,
+          About: e.target.value,
+        });
+        break;
+      case "URL":
+        setGroup({
+          ...Group,
+          ImgURL: e.target.value,
+        });
+        break;
+      default:
+        break;
     }
+  };
 
-    let history = useHistory();
-    const onSubmit = (e) => {
-        e.preventDefault();
-        getGroupData().doc(id).update({
-            Name: Group.Name,
-            About: Group.About,
-            ImgURL: Group.ImgURL
-        }).then(
-            document.getElementById("name").value = '',
-            document.getElementById("textarea-input").value = '',
-            document.getElementById("img").value = '',
-            history.push('/Groups/All')
-        )
-    }
+  const onSubmit = (e) => {
+    e.preventDefault();
+    getGroupData()
+      .doc(id)
+      .update({
+        Name: Group.Name,
+        About: Group.About,
+        ImgURL: Group.ImgURL,
+      })
+      .then(
+        (document.getElementById("name").value = ""),
+        (document.getElementById("textarea-input").value = ""),
+        (document.getElementById("img").value = ""),
+        history.push("/Groups/All")
+      );
+  };
 
-    return (
-        <>
-            <div className='container'>
-                <CForm onSubmit={onSubmit}>
-                    <CFormGroup className='mx-auto w-50'>
-                        <CLabel htmlFor="name" className='pt-2'>Group Name:</CLabel>
-                        <CInput id="name" name="Name" onChange={handleForm} value={Group.Name} placeholder="Enter Group name" required />
-                        <CLabel htmlFor="textarea-input" className='pt-2'>Description:</CLabel>
-                        <CTextarea
-                            name="About"
-                            id="textarea-input"
-                            rows="9"
-                            placeholder="Content..."
-                            onChange={handleForm}
-                            value={Group.About}
-                        />
-                        <CLabel htmlFor="img" className='pt-2'>Img URL:</CLabel>
-                        <CInput id="img" name="URL" placeholder="Enter Group Img URL" required onChange={handleForm} value={Group.ImgURL} />
-                        <CCardFooter className='mt-3 rounded'>
-                            <div className='text-center'>
-                                <CButton type='submit' color="info" size="sm" className='w-25 mx-1'>
-                                    Edit
-                                </CButton>
-                                <CButton type="reset" size="sm" color="danger" className='w-25 mx-1'>
-                                    Reset
-                                </CButton>
-                            </div>
-                        </CCardFooter>
-                    </CFormGroup>
-                </CForm>
-            </div>
-        </>
-    )
-}
+  return (
+    <>
+      <div className="container">
+        <CForm onSubmit={onSubmit}>
+          <CFormGroup className="mx-auto w-50">
+            <CLabel htmlFor="name" className="pt-2">
+              Group Name:
+            </CLabel>
+            <CInput
+              id="name"
+              name="Name"
+              onChange={handleForm}
+              value={Group.Name}
+              placeholder="Enter Group name"
+              required
+            />
+            <CLabel htmlFor="textarea-input" className="pt-2">
+              Description:
+            </CLabel>
+            <CTextarea
+              name="About"
+              id="textarea-input"
+              rows="9"
+              placeholder="Content..."
+              onChange={handleForm}
+              value={Group.About}
+            />
+            <CLabel htmlFor="img" className="pt-2">
+              Img URL:
+            </CLabel>
+            <CInput
+              id="img"
+              name="URL"
+              placeholder="Enter Group Img URL"
+              required
+              onChange={handleForm}
+              value={Group.ImgURL}
+            />
+            <CCardFooter className="mt-3 rounded">
+              <div className="text-center">
+                <CButton
+                  type="submit"
+                  color="info"
+                  size="sm"
+                  className="w-25 mx-1"
+                >
+                  Edit
+                </CButton>
+                <CButton
+                  type="reset"
+                  size="sm"
+                  color="danger"
+                  className="w-25 mx-1"
+                >
+                  Reset
+                </CButton>
+              </div>
+            </CCardFooter>
+          </CFormGroup>
+        </CForm>
+      </div>
+    </>
+  );
+};
 
-export default EditGroup
+export default EditGroup;
