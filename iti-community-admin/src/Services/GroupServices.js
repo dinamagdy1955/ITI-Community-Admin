@@ -1,4 +1,4 @@
-import db from "src/firebase";
+import { db } from "src/firebase";
 
 export function getGroupData() {
   // return db
@@ -26,5 +26,5 @@ export function delGroup(id) {
 }
 
 export function EditGroup() {
-  return db.collection("Groups")
+  return db.collection("Groups");
 }

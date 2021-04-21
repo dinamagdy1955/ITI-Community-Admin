@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { useHistory } from "react-router";
 import {
   CButton,
   CCard,
@@ -13,8 +14,53 @@ import {
   CRow,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
+import { db } from "src/firebase";
 
 const BasicForms = () => {
+  const history = useHistory();
+  if (localStorage.getItem("adminToken") == undefined) history.push("/login");
+  const [job, setJob] = useState({
+    company: "ITI",
+    position: "",
+    postedDate: new Date(),
+    level: "",
+    description: "",
+    status: "",
+  });
+
+  const handleForm = (e) => {
+    switch (e.target.name) {
+      case "position":
+        setJob({
+          ...job,
+          position: e.target.value,
+        });
+        break;
+
+      case "level":
+        setJob({
+          ...job,
+          level: e.target.value,
+        });
+        break;
+      case "description":
+        setJob({
+          ...job,
+          description: e.target.value,
+        });
+        break;
+      case "status":
+        setJob({
+          ...job,
+          status: e.target.value,
+        });
+        break;
+    }
+  };
+  function AddJob() {
+    db.collection("jobs").doc().set(job);
+    history.push("/jobs/showjobs");
+  }
   return (
     <>
       <CRow>
@@ -22,42 +68,16 @@ const BasicForms = () => {
           <CCard>
             <CForm action="" method="post" className="form-horizontal">
               <CFormGroup>
-                <CCardHeader>
-                  Add a Job
-                  <small> Form</small>
-                </CCardHeader>
+                <CCardHeader>Add a Job</CCardHeader>
                 <CCardBody>
                   <CRow>
                     <CCol xs="12">
                       <CFormGroup>
                         <CLabel htmlFor="name">Position</CLabel>
                         <CInput
-                          id="name"
+                          name="position"
                           placeholder="Enter the position of the annonounced job"
-                          required
-                        />
-                      </CFormGroup>
-                    </CCol>
-                  </CRow>
-                  <CRow>
-                    <CCol xs="12">
-                      <CFormGroup>
-                        <CLabel htmlFor="name">Posted Date</CLabel>
-                        <CInput
-                          id="name"
-                          placeholder="Enter the posted date"
-                          required
-                        />
-                      </CFormGroup>
-                    </CCol>
-                  </CRow>
-                  <CRow>
-                    <CCol xs="12">
-                      <CFormGroup>
-                        <CLabel htmlFor="name">Company</CLabel>
-                        <CInput
-                          id="name"
-                          placeholder="Enter the company name"
+                          onChange={handleForm}
                           required
                         />
                       </CFormGroup>
@@ -68,8 +88,9 @@ const BasicForms = () => {
                       <CFormGroup>
                         <CLabel htmlFor="name">Level</CLabel>
                         <CInput
-                          id="name"
+                          name="level"
                           placeholder="Enter the position level"
+                          onChange={handleForm}
                           required
                         />
                       </CFormGroup>
@@ -80,8 +101,9 @@ const BasicForms = () => {
                       <CFormGroup>
                         <CLabel htmlFor="name">Description</CLabel>
                         <CInput
-                          id="name"
+                          name="description"
                           placeholder="Enter the description"
+                          onChange={handleForm}
                           required
                         />
                       </CFormGroup>
@@ -92,8 +114,9 @@ const BasicForms = () => {
                       <CFormGroup>
                         <CLabel htmlFor="name">Status</CLabel>
                         <CInput
-                          id="name"
+                          name="status"
                           placeholder="Enter the job status"
+                          onChange={handleForm}
                           required
                         />
                       </CFormGroup>
@@ -101,7 +124,7 @@ const BasicForms = () => {
                   </CRow>
                 </CCardBody>
                 <CCardFooter>
-                  <CButton type="submit" size="sm" color="success">
+                  <CButton size="sm" color="success" onClick={() => AddJob()}>
                     <CIcon name="cil-scrubber" /> Submit
                   </CButton>
                   <CButton type="reset" size="sm" color="danger">
