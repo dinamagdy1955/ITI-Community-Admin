@@ -2,57 +2,31 @@
 // import db from "src/firebase";
 // import AllGroups from "../views/Groups/All/allGroups";
 
-// export function getGroupData() {
-//   return db
-//     .collection("Groups")
-//     .get()
-//     .then((res) => {
-//       var arr = [];
-//       res.forEach((e) => {
-//         arr.push({
-//           id: e.id,
-//           data: e.data(),
-//         });
-//       });
-//       return arr;
-//     });
-// }
-// // export default function GroupServices() {
-// //   const [group, setGroup] = useState([]);
-// //   useEffect(() => {
-// //     getData();
-// //   }, []);
+export function getGroupData() {
+  // return db
+  //   .collection("Groups")
+  //   .get()
+  //   .then((res) => {
+  //     var arr = [];
+  //     res.forEach((e) => {
+  //       arr.push({
+  //         id: e.id,
+  //         data: e.data(),
+  //       });
+  //     });
+  //     return arr;
+  //   });
+  return db
+    .collection("Groups")
 
-//   // const getData = async () => {
-//   //   await db
-//   //   .collection("Groups")
-//   //   .get()
-//   //   .then((res) => {
-//   //     var arr = [];
-//   //     res.forEach((e) => {
-//   //       arr.push({
-//   //         id: e.id,
-//   //         data: e.data(),
-//   //       });
-//   //     });
-//   //     setGroup(arr);
-//   //   });
-//   // };
-//   // const getData = () => {
-//   //     const resp = db.collection('Groups').get()
-//   //         .then(function (snapshot) {
-//   //             var groups = []
-//   //             snapshot.forEach(function (child) {
-//   //                 var id = child.id;
-//   //                 var data = child.data()
-//   //                 groups.push({ id: id, data });
-//   //             })
-//   //             console.log(groups);
-//   //         })
-//   // }
-//   // return (
-//   //   <>
-//   //     <AllGroups grp={group} />
-//   //   </>
-//   // );
-// // }
+}
+
+export function addNewGroup(data) {
+  return db
+    .collection("Groups").add(data)
+}
+
+export function delGroup(id) {
+  return db.collection("Groups").doc(id).delete();
+}
+
