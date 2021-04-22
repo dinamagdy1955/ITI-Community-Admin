@@ -71,11 +71,7 @@ const _nav = [
         name: "Add Branch",
         to: "/branches/Add-Branche",
       },
-      {
-        _tag: "CSidebarNavItem",
-        name: "Edit Branch",
-        to: "/branches/Edit-Branche",
-      },
+    
     ],
   },
   //////////////////////////////
@@ -95,11 +91,11 @@ const _nav = [
         name: "Add Track",
         to: "/tracks/Add-Track",
       },
-      {
-        _tag: "CSidebarNavItem",
-        name: "Edit Track",
-        to: "/tracks/Edit-Track",
-      },
+      // {
+      //   _tag: "CSidebarNavItem",
+      //   name: "Edit Track",
+      //   to: "/tracks/Edit-Track",
+      // },
     ],
   },
   {
