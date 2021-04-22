@@ -41,11 +41,7 @@ export default function ShowAll() {
     });
   }, []);
 
-  function getBranchData(itm) {
-    console.log(itm);
-    return itm;
-  }
-
+ 
 
 
   function Delete(id) {
@@ -92,9 +88,9 @@ export default function ShowAll() {
                         Delete
                       </Button>{" "}
                       <Link
-                        to="/branches/Edit-Branche"
-                        onClick={() => getBranchData(item)}
-                      >
+                        to= {`/branches/${item.id}`}
+                       >
+                      
                         <Button variant="success">Edit</Button>
                       </Link>
                     </td>

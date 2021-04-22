@@ -1,57 +1,228 @@
-import { Form, Button } from "react-bootstrap";
-import React, { Suspense, useState } from "react";
 
-import { useHistory } from "react-router";
+import React, { useEffect, useState } from 'react'
+import { useHistory, useParams } from 'react-router'
+import { Form, Button} from "react-bootstrap";
+import {db} from 'src/firebase'
+
+
 export default function EditTrack() {
   //EditTrack()
   const history = useHistory();
   if (localStorage.getItem("adminToken") == undefined) history.push("/login");
+  
+  
+
+  const getTrackData =()=>{
+  
+    return db.collection("Tracks");
+  }
+
+  const {id} = useParams()
+  const [Track, setTrack] = useState({
+    
+    name: "",
+    branch: "",
+    manager: "",
+    specilization: "",
+    no_students: 0,
+    totalTime: "",
+  })
+
+  useEffect(() => {
+      const ref = getTrackData().doc(id).get();
+      ref.then((doc) => {
+          if (doc.exists) {
+              const data = doc.data()
+              setTrack({
+                  name: data.name,
+                  branch: data. branch,
+                  manager: data.manager,
+                  specilization: data.specilization,
+                  no_students: data. no_students,
+                  totalTime: data.totalTime,
+                  
+                 
+              });
+          } else {
+              throw('Not Founded')
+          }
+      })
+  }, [])
+
+
+  const handleForm = (e) => {
+    console.log(e.target.value, e.target.name);
+    switch (e.target.name) {
+      case "name":
+        setTrack({
+          ...Track,
+          name: e.target.value,
+        });
+        break;
+
+      case "branch":
+        setTrack({
+          ...Track,
+          branch: e.target.value,
+        });
+        break;
+      case "manager":
+        setTrack({
+          ...Track,
+          manager: e.target.value,
+        });
+        break;
+
+      case "specilization":
+        setTrack({
+          ...Track,
+          specilization: e.target.value,
+        });
+        break;
+      //
+      case "no_students":
+        setTrack({
+          ...Track,
+          no_students: e.target.value,
+        });
+        break;
+      //
+      case "totalTime":
+        setTrack({
+          ...Track,
+          totalTime: e.target.value,
+        });
+        break;
+        default:
+          break;
+    }
+  };
+ // 
+  const onSubmit = (e) => {
+      e.preventDefault();
+      getTrackData().doc(id).update({
+        name: Track.name,
+        branch: Track. branch,
+        manager: Track.manager,
+        specilization: Track.specilization,
+        no_students: Track. no_students,
+        totalTime: Track.totalTime,
+       
+      }).then(
+        document.getElementById("Name").value = '',
+        document.getElementById("Branch").value = '',
+        document.getElementById("Manager").value = '',
+        document.getElementById("spec").value = 0,
+        document.getElementById("SN").value = 0,
+        document.getElementById("TTT").value = 0,
+        
+          history.push('/tracks/Show-Tracks')
+      )
+  }
+
+
+
+
+
+ 
+  
+  
+  
+  
+  
+  
   return (
     <>
       <h1>Tracks</h1>
       <h4>Edit </h4>
       <br></br>
-      <Form>
-        <Form.Group controlId="formGridTN">
+      <Form onSubmit={onSubmit}>
+        <Form.Group>
           <Form.Label>Name</Form.Label>
-          <Form.Control type="text" placeholder="" />
+          <Form.Control
+          id="Name" 
+            type="text"
+            placeholder="Enter Track Name"
+            name="name"
+            onChange={handleForm}
+            value={Track.name}
+          />
         </Form.Group>
 
-        <Form.Group controlId="formGridTB">
+        <Form.Group>
           <Form.Label>Branch</Form.Label>
-          <Form.Control type="text" placeholder="" />
+          <Form.Control
+           id="Branch" 
+            type="text"
+            placeholder="Enter Branch name "
+            name="branch"
+            onChange={handleForm}
+            value={Track.branch}
+          />
         </Form.Group>
 
-        <Form.Group controlId="formGridTS">
+        <Form.Group >
           <Form.Label>Specialization</Form.Label>
-          <Form.Control type="text" placeholder="" />
+          <Form.Control
+          id="spec" 
+            type="text"
+            placeholder="Enter track Specialization"
+            name="specilization"
+            onChange={handleForm}
+            value={Track.specilization}
+          />
+        </Form.Group>
+
+        <Form.Group >
+          <Form.Label>Manager</Form.Label>
+          <Form.Control
+          id="Manager" 
+            type="text"
+            placeholder="Enter track Manager"
+            name="manager"
+            onChange={handleForm}
+            value={Track.manager}
+          />
         </Form.Group>
 
         <Form.Row>
-          <Form.Group controlId="formGridTTT" style={{ margin: "5px" }}>
+          <Form.Group  style={{ margin: "5px" }}>
+            <Form.Label>NO.Students</Form.Label>
+            <Form.Control
+            id="SN"
+              type="number"
+              placeholder="NO.Students"
+              name="no_students"
+              onChange={handleForm}
+              value={Track.no_students}
+            />
+          </Form.Group>
+
+          <Form.Group  style={{ margin: "5px" }}>
             <Form.Label>Track Total Time</Form.Label>
 
-            <select className="form-control">
+            <select
+            id="TTT"
+              className="form-control"
+              name="totalTime"
+              onChange={handleForm}
+              value={Track.totalTime}
+            >
               <option></option>
               <option>9 Monthes</option>
               <option>6 Monthes</option>
               <option>3 Monthes</option>
             </select>
           </Form.Group>
-
-          <Form.Group controlId="formGridTSN" style={{ margin: "5px" }}>
-            <Form.Label>NO.Students</Form.Label>
-            <Form.Control type="number" placeholder="NO.Students" />
-          </Form.Group>
-
-          <Form.Group controlId="formGridTCN" style={{ margin: "5px" }}>
-            <Form.Label>NO.Coursess</Form.Label>
-            <Form.Control type="number" placeholder="NO.Coursess" />
-          </Form.Group>
         </Form.Row>
 
-        <Button variant="primary" type="submit" style={{ margin: "10px" }}>
-          Add
+        <Button
+          variant="primary"
+          type="submit"
+          style={{ margin: "10px" }}
+         
+        >
+          Edit
         </Button>
       </Form>
     </>

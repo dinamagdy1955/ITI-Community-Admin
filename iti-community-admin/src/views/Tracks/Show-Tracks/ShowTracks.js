@@ -89,7 +89,7 @@ export default function ShowTracks() {
                       >
                         Delete
                       </Button>{" "}
-                      <Link to="/tracks/Edit-Track" x={item}>
+                      <Link to= {`/tracks/${item.id}`}>
                         <Button variant="success">Edit</Button>
                       </Link>
                     </td>

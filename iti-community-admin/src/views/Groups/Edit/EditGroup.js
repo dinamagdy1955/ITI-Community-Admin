@@ -15,6 +15,7 @@ const EditGroup = () => {
   const history = useHistory();
   if (localStorage.getItem("adminToken") == undefined) history.push("/login");
   const { id } = useParams();
+  console.log(id )
   const [Group, setGroup] = useState({
     Name: "",
     About: "",

@@ -51,14 +51,14 @@ const routes = [
   { path: "/branches/Show-All", name: "Show All", component: ShowAll },
   { path: "/branches/Add-Branche", name: "Add Branch", component: AddBranch },
   {
-    path: "/branches/Edit-Branche",
+    path: "/branches/:id",
     name: "Edit-Branch",
     component: EditBranch,
   },
 
   { path: "/tracks/Show-Tracks", name: "Show Tracks", component: ShowTracks },
   { path: "/tracks/Add-Track", name: "Add Track", component: AddTrack },
-  { path: "/tracks/Edit-Track", name: "Edit Track", component: EditTrack },
+  { path: "/tracks/:id", name: "Edit Track", component: EditTrack },
 
   {
     path: "/jobs/showjobs",
