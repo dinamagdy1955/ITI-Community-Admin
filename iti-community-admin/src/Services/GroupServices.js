@@ -1,19 +1,6 @@
 import { db } from "src/firebase";
 
 export function getGroupData() {
-  // return db
-  //   .collection("Groups")
-  //   .get()
-  //   .then((res) => {
-  //     var arr = [];
-  //     res.forEach((e) => {
-  //       arr.push({
-  //         id: e.id,
-  //         data: e.data(),
-  //       });
-  //     });
-  //     return arr;
-  //   });
   return db.collection("Groups");
 }
 
