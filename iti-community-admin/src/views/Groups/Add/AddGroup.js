@@ -27,9 +27,8 @@ const AddGroup = () => {
     CreatedDate: new Date(),
   });
   let flag = false
-  const [progress, setprogress] = useState(0)
-  console.log(progress)
-  if (progress >= 100) {
+  const [progress, setprogress] = useState(100)
+  if (progress.pro >= 100) {
     flag = true
   }
 
@@ -56,6 +55,10 @@ const AddGroup = () => {
         break;
       case "URL":
         if (e.target.files.length > 0) {
+          setprogress({
+            pro: 0,
+            msg: 'Wait To Upload Your Image'
+          })
           const file = e.target.files[0]
           const storageRef = await upload.ref(`GroupImg/${file.name}`)
           const prog = storageRef.put(file)
@@ -158,11 +161,11 @@ const AddGroup = () => {
                     type="button"
                     color="info"
                     size="sm"
-                    disabled={flag ? true : false}
+                    disabled={progress.pro < 100 ? true : false}
                     className="w-25 mx-1"
                     onClick={addNew}
                   >
-                    {flag ? progress.msg : 'Add'}
+                    {progress.pro < 100 ? progress.msg : 'Add'}
                   </CButton>
                 </Link>
                 <CButton
