@@ -2,20 +2,22 @@ import React, { useEffect, useState } from "react";
 import {
   CButton,
   CCardFooter,
+  CCol,
   CForm,
   CFormGroup,
   CInput,
+  CInputFile,
   CLabel,
   CTextarea,
 } from "@coreui/react";
 import { useHistory, useParams } from "react-router";
 import { getGroupData } from "src/Services/GroupServices";
+import { upload } from "src/firebase";
 
 const EditGroup = () => {
   const history = useHistory();
-  if (localStorage.getItem("adminToken") == undefined) history.push("/login");
+  if (localStorage.getItem("adminToken") === undefined) history.push("/login");
   const { id } = useParams();
-  console.log(id)
   const [Group, setGroup] = useState({
     Name: "",
     Description: "",
@@ -23,7 +25,7 @@ const EditGroup = () => {
     Specialty: "",
 
   });
-
+  const [progress, setprogress] = useState(100)
   useEffect(() => {
     const ref = getGroupData().doc(id).get();
     ref.then((doc) => {
@@ -41,7 +43,7 @@ const EditGroup = () => {
     });
   }, []);
 
-  const handleForm = (e) => {
+  const handleForm = async (e) => {
     switch (e.target.name) {
       case "Name":
         setGroup({
@@ -63,10 +65,38 @@ const EditGroup = () => {
         });
         break;
       case "URL":
-        setGroup({
-          ...Group,
-          Img: e.target.value,
-        });
+        if (e.target.files.length > 0) {
+          setprogress({
+            pro: 0,
+            msg: 'Wait To Upload Your Image'
+          })
+          const file = e.target.files[0]
+          const storageRef = await upload.ref(`GroupImg/${file.name}`)
+          const prog = storageRef.put(file)
+          const pro = ((await prog).bytesTransferred / (await prog).totalBytes) * 100
+          setprogress({
+            pro: pro,
+            msg: 'Wait To Upload Your Image'
+          })
+          prog.then(e => {
+            e.ref.getDownloadURL().then((url) => {
+              console.log(url)
+              setGroup({
+                ...Group,
+                Img: url,
+              })
+            })
+          })
+        } else {
+          setGroup({
+            ...Group,
+            Img: Group.Img,
+          })
+        }
+        // setGroup({
+        //   ...Group,
+        //   Img: e.target.value,
+        // });
         break;
       default:
         break;
@@ -130,26 +160,34 @@ const EditGroup = () => {
               onChange={handleForm}
               value={Group.Description}
             />
-            <CLabel htmlFor="img" className="pt-2">
+            {/* <CLabel htmlFor="img" className="pt-2">
               Img:
             </CLabel>
             <CInput
               id="img"
               name="URL"
-              placeholder="Enter Group Img URL"
+              placeholder="Enter Group Img"
               required
               onChange={handleForm}
               value={Group.Img}
-            />
+            /> */}
+            <img src={Group.Img} width="400" className="py-4" />
+            <CFormGroup row>
+              <CLabel col md="3" htmlFor="file-input">Change Group Image</CLabel>
+              <CCol xs="12" md="9">
+                <CInputFile id="file-input" name="file-input" id="img" name="URL" onChange={handleForm} />
+              </CCol>
+            </CFormGroup>
             <CCardFooter className="mt-3 rounded">
               <div className="text-center">
                 <CButton
                   type="submit"
                   color="info"
+                  disabled={progress.pro < 100 ? true : false}
                   size="sm"
                   className="w-25 mx-1"
                 >
-                  Edit
+                  {progress.pro < 100 ? progress.msg : 'Edit'}
                 </CButton>
                 <CButton
                   type="reset"

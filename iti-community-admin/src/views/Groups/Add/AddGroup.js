@@ -18,7 +18,7 @@ import { upload } from "src/firebase";
 
 const AddGroup = () => {
   const history = useHistory();
-  if (localStorage.getItem("adminToken") == undefined) history.push("/login");
+  if (localStorage.getItem("adminToken") === undefined) history.push("/login");
   const [Group, setGroup] = useState({
     Name: "",
     Description: "",
@@ -26,12 +26,7 @@ const AddGroup = () => {
     Specialty: "",
     CreatedDate: new Date(),
   });
-  let flag = false
   const [progress, setprogress] = useState(100)
-  if (progress.pro >= 100) {
-    flag = true
-  }
-
   const handleForm = async (e) => {
     switch (e.target.name) {
       case "Name":
@@ -68,33 +63,14 @@ const AddGroup = () => {
             msg: 'Wait To Upload Your Image'
           })
           prog.then(e => {
-            if (flag) {
-              e.ref.getDownloadURL().then((url) => {
-                console.log(url)
-                setGroup({
-                  ...Group,
-                  Img: url,
-                })
+            e.ref.getDownloadURL().then((url) => {
+              console.log(url)
+              setGroup({
+                ...Group,
+                Img: url,
               })
-            }
+            })
           })
-
-          // .on("state_changed", (async (e) => {
-          //   upload.ref('GroupImg').child(file.name).getDownloadURL().then((url) => {
-          //     const pro = (e.bytesTransferred / e.totalBytes) * 100
-          //     setprogress({
-          //       pro: pro,
-          //       msg: 'Wait To Upload Your Image'
-          //     })
-          //     if (flag) {
-          //       setGroup({
-          //         ...Group,
-          //         Img: url,
-          //       })
-          //     }
-          //   })
-          // }))
-
         } else {
           setGroup({
             ...Group,

@@ -6,9 +6,10 @@ import { delGroup, delUser, editUser, getGroupData, getUsers } from "src/Service
 import { useHistory } from "react-router";
 export default function AllGroups() {
   const history = useHistory();
-  if (localStorage.getItem("adminToken") == undefined) history.push("/login");
+  if (localStorage.getItem("adminToken") === undefined) history.push("/login");
 
   const [group, setGroup] = useState([]);
+
 
   var users = [];
   var sub;
@@ -29,6 +30,7 @@ export default function AllGroups() {
         var month = new Date(g.data.CreatedDate * 1000).getMonth() + 1;
         var year = new Date(g.data.CreatedDate * 1000).getFullYear() - 1969;
         sub2 = getUsers(g.id).onSnapshot(res => {
+          let flag = false
           users = [];
           res.forEach(e => {
             users.push({
@@ -36,16 +38,29 @@ export default function AllGroups() {
               ...(e.data())
             })
           })
-          arr = arr.filter(e => e.id != g.id)
-          arr.push({
-            id: g.id,
-            Name: g.data.Name,
-            About: g.data.Description,
-            URL: g.data.Img,
-            CreatedAt: day + "-" + month + "-" + year,
-            Specialty: g.data.Specialty,
-            Users: users
-          });
+          arr.find(e => {
+            if (e.id == g.id) {
+              flag = true
+              e.id = g.id
+              e.Name = g.data.Name
+              e.About = g.data.Description
+              e.URL = g.data.Img
+              e.CreatedAt = day + "-" + month + "-" + year
+              e.Specialty = g.data.Specialty
+              e.Users = users
+            }
+          })
+          if (!flag) {
+            arr.push({
+              id: g.id,
+              Name: g.data.Name,
+              About: g.data.Description,
+              URL: g.data.Img,
+              CreatedAt: day + "-" + month + "-" + year,
+              Specialty: g.data.Specialty,
+              Users: users
+            });
+          }
           let viewData = [...arr];
           setGroup(viewData);
           return true;
@@ -97,6 +112,26 @@ export default function AllGroups() {
 
   function Roles(id, user, role) {
     editUser(id, user, role)
+  }
+
+  const [getRole, setRole] = useState({ Role: 'All', val: 3 })
+  function showRole(e) {
+    switch (e.target.value) {
+      case '3':
+        setRole({ Role: 'All', val: 3 })
+        break;
+      case '0':
+        setRole({ Role: 'Subscriber', val: 0 })
+        break;
+      case '1':
+        setRole({ Role: 'Admin', val: 1 })
+        break;
+      case '2':
+        setRole({ Role: 'Member', val: 2 })
+        break;
+      default:
+        break;
+    }
   }
 
   return (
@@ -183,31 +218,67 @@ export default function AllGroups() {
                       <CModalTitle>{item.Name}</CModalTitle>
                     </CModalHeader>
                     <CModalBody className="text-left">
+                      <select className="form-select" aria-label="Default select example" onChange={showRole}>
+                        <option value="3">Select Role</option>
+                        <option value="1">Admins</option>
+                        <option value="2">Members</option>
+                        <option value="0">Subscribers</option>
+                      </select>
                       {item.Users.map((e, i) =>
-                        <div className="row py-2" key={i}>
-                          <div className="col-2 d-flex align-items-center">
-                            <img src={e.avatar} className="img-thumbnail rounded-circle" width="80" />
-                          </div>
-                          <div className="col-7 d-flex align-items-center">
-                            {e.Role == 1 && <span>{e.firstName} {e.lastName}  <CBadge color="success">Admin</CBadge></span>}
-                            {e.Role == 2 && <span>{e.firstName} {e.lastName}  <CBadge color="info">Member</CBadge></span>}
-                            {e.Role == 0 && <span>{e.firstName} {e.lastName}  <CBadge color="secondary">Subscriber</CBadge></span>}
-                          </div>
-                          <div className="col-3 text-right d-flex align-items-center justify-content-end">
-                            <CDropdown className="m-1">
-                              <CDropdownToggle>
-                                Action
-                            </CDropdownToggle>
-                              <CDropdownMenu>
-                                <CDropdownItem onClick={() => Roles(item.id, e.id, 'admin')}>Make Admin</CDropdownItem>
-                                <CDropdownItem onClick={() => Roles(item.id, e.id, 'member')}>Make Member</CDropdownItem>
-                                <CDropdownItem onClick={() => Roles(item.id, e.id, 'subs')}>Make Subscriber</CDropdownItem>
-                                <CDropdownDivider />
-                                <CDropdownItem onClick={() => deleteUser(item.id, e.id)}>Delete</CDropdownItem>
-                              </CDropdownMenu>
-                            </CDropdown>
-                          </div>
+                        <div className="" key={i}>
+                          {getRole.val == 3 ? (
+                            <div className="row py-2">
+                              <div className="col-2 d-flex align-items-center">
+                                <img src={e.avatar} className="img-thumbnail rounded-circle" width="80" />
+                              </div>
+                              <div className="col-7 d-flex align-items-center">
+                                {e.Role == 1 && <span>{e.firstName} {e.lastName}  <CBadge color="success">Admin</CBadge></span>}
+                                {e.Role == 2 && <span>{e.firstName} {e.lastName}  <CBadge color="info">Member</CBadge></span>}
+                                {e.Role == 0 && <span>{e.firstName} {e.lastName}  <CBadge color="secondary">Subscriber</CBadge></span>}
+                              </div>
+                              <div className="col-3 text-right d-flex align-items-center justify-content-end">
+                                <CDropdown className="m-1">
+                                  <CDropdownToggle>
+                                    Action
+                                  </CDropdownToggle>
+                                  <CDropdownMenu>
+                                    <CDropdownItem onClick={() => Roles(item.id, e.id, 'admin')}>Make Admin</CDropdownItem>
+                                    <CDropdownItem onClick={() => Roles(item.id, e.id, 'member')}>Make Member</CDropdownItem>
+                                    <CDropdownItem onClick={() => Roles(item.id, e.id, 'subs')}>Make Subscriber</CDropdownItem>
+                                    <CDropdownDivider />
+                                    <CDropdownItem onClick={() => deleteUser(item.id, e.id)}>Delete</CDropdownItem>
+                                  </CDropdownMenu>
+                                </CDropdown>
+                              </div>
+                            </div>
+                          ) : (
+                            e.Role == getRole.val &&
+                            <div className="row py-2">
+                              <div className="col-2 d-flex align-items-center">
+                                <img src={e.avatar} className="img-thumbnail rounded-circle" width="80" />
+                              </div>
+                              <div className="col-7 d-flex align-items-center">
+                                <span>{e.firstName} {e.lastName}  <CBadge color="success">{getRole.Role}</CBadge></span>
+                              </div>
+                              <div className="col-3 text-right d-flex align-items-center justify-content-end">
+                                <CDropdown className="m-1">
+                                  <CDropdownToggle>
+                                    Action
+                                  </CDropdownToggle>
+                                  <CDropdownMenu>
+                                    <CDropdownItem onClick={() => Roles(item.id, e.id, 'admin')}>Make Admin</CDropdownItem>
+                                    <CDropdownItem onClick={() => Roles(item.id, e.id, 'member')}>Make Member</CDropdownItem>
+                                    <CDropdownItem onClick={() => Roles(item.id, e.id, 'subs')}>Make Subscriber</CDropdownItem>
+                                    <CDropdownDivider />
+                                    <CDropdownItem onClick={() => deleteUser(item.id, e.id)}>Delete</CDropdownItem>
+                                  </CDropdownMenu>
+                                </CDropdown>
+                              </div>
+                            </div>
+                          )
+                          }
                         </div>
+
                       )}
                     </CModalBody>
                     <CModalFooter>
