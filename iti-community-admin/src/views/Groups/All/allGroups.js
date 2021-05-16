@@ -1,15 +1,39 @@
-import { CBadge, CButton, CCardBody, CCollapse, CDataTable, CDropdown, CDropdownDivider, CDropdownItem, CDropdownMenu, CDropdownToggle, CImg, CListGroup, CListGroupItem, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from "@coreui/react";
-import CIcon from '@coreui/icons-react';
+import {
+  CBadge,
+  CButton,
+  CCardBody,
+  CCollapse,
+  CDataTable,
+  CDropdown,
+  CDropdownDivider,
+  CDropdownItem,
+  CDropdownMenu,
+  CDropdownToggle,
+  CImg,
+  CListGroup,
+  CListGroupItem,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import CIcon from "@coreui/icons-react";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { delGroup, delUser, editUser, getGroupData, getUsers } from "src/Services/GroupServices";
+import {
+  delGroup,
+  delUser,
+  editUser,
+  getGroupData,
+  getUsers,
+} from "src/Services/GroupServices";
 import { useHistory } from "react-router";
 export default function AllGroups() {
   const history = useHistory();
   if (localStorage.getItem("adminToken") === undefined) history.push("/login");
 
   const [group, setGroup] = useState([]);
-
 
   var users = [];
   var sub;
@@ -29,27 +53,27 @@ export default function AllGroups() {
         var day = new Date(g.data.CreatedDate * 1000).getDate();
         var month = new Date(g.data.CreatedDate * 1000).getMonth() + 1;
         var year = new Date(g.data.CreatedDate * 1000).getFullYear() - 1969;
-        sub2 = getUsers(g.id).onSnapshot(res => {
-          let flag = false
+        sub2 = getUsers(g.id).onSnapshot((res) => {
+          let flag = false;
           users = [];
-          res.forEach(e => {
+          res.forEach((e) => {
             users.push({
               id: e.id,
-              ...(e.data())
-            })
-          })
-          arr.find(e => {
+              ...e.data(),
+            });
+          });
+          arr.find((e) => {
             if (e.id == g.id) {
-              flag = true
-              e.id = g.id
-              e.Name = g.data.Name
-              e.About = g.data.Description
-              e.URL = g.data.Img
-              e.CreatedAt = day + "-" + month + "-" + year
-              e.Specialty = g.data.Specialty
-              e.Users = users
+              flag = true;
+              e.id = g.id;
+              e.Name = g.data.Name;
+              e.About = g.data.Description;
+              e.URL = g.data.Img;
+              e.CreatedAt = day + "-" + month + "-" + year;
+              e.Specialty = g.data.Specialty;
+              e.Users = users;
             }
-          })
+          });
           if (!flag) {
             arr.push({
               id: g.id,
@@ -58,24 +82,24 @@ export default function AllGroups() {
               URL: g.data.Img,
               CreatedAt: day + "-" + month + "-" + year,
               Specialty: g.data.Specialty,
-              Users: users
+              Users: users,
             });
           }
           let viewData = [...arr];
           setGroup(viewData);
           return true;
-        })
+        });
       });
     });
     return () => {
-      sub()
-      sub2()
-    }
+      sub();
+      sub2();
+    };
   }, []);
 
   const [details, setDetails] = useState([]);
 
-  const [large, setLarge] = useState(false)
+  const [large, setLarge] = useState(false);
 
   const toggleDetails = (index) => {
     const Position = details.indexOf(index);
@@ -83,7 +107,7 @@ export default function AllGroups() {
     if (Position !== -1) {
       newDetails.splice(Position, 1);
     } else {
-      newDetails = [...details, index];
+      newDetails = [index];
     }
     setDetails(newDetails);
   };
@@ -107,27 +131,27 @@ export default function AllGroups() {
   }
 
   function deleteUser(id, user) {
-    delUser(id, user)
+    delUser(id, user);
   }
 
   function Roles(id, user, role) {
-    editUser(id, user, role)
+    editUser(id, user, role);
   }
 
-  const [getRole, setRole] = useState({ Role: 'All', val: 3 })
+  const [getRole, setRole] = useState({ Role: "All", val: 3 });
   function showRole(e) {
     switch (e.target.value) {
-      case '3':
-        setRole({ Role: 'All', val: 3 })
+      case "3":
+        setRole({ Role: "All", val: 3 });
         break;
-      case '0':
-        setRole({ Role: 'Subscriber', val: 0 })
+      case "0":
+        setRole({ Role: "Subscriber", val: 0 });
         break;
-      case '1':
-        setRole({ Role: 'Admin', val: 1 })
+      case "1":
+        setRole({ Role: "Admin", val: 1 });
         break;
-      case '2':
-        setRole({ Role: 'Member', val: 2 })
+      case "2":
+        setRole({ Role: "Member", val: 2 });
         break;
       default:
         break;
@@ -187,25 +211,38 @@ export default function AllGroups() {
                     <div className="col-6">
                       <h6>Admins :</h6>
                       <CListGroup className="pb-2">
-                        {
-                          item.Users.map((e, i) =>
-                            i <= 2 ? (
-                              e.Role == 1 &&
-                              <CListGroupItem className="justify-content-between" key={i}>
+                        {item.Users.map((e, i) =>
+                          i <= 2 ? (
+                            e.Role == 1 && (
+                              <CListGroupItem
+                                className="justify-content-between"
+                                key={i}
+                              >
                                 {e.firstName} {e.lastName}
                                 <span className="float-right  p-0">
-                                  <CButton className="p-0 text-danger" onClick={() => deleteUser(item.id, e.id)}>
+                                  <CButton
+                                    className="p-0 text-danger"
+                                    onClick={() => deleteUser(item.id, e.id)}
+                                  >
                                     <CIcon name="cil-trash" className="p-0" />
                                   </CButton>
                                 </span>
                               </CListGroupItem>
-                            ) : (
-                              <CListGroupItem className="justify-content-between text-center bg-primary p-0" key={i}>
-                                <CButton onClick={() => setLarge(!large)} className="text-white btn-block">Show All Users</CButton>
-                              </CListGroupItem>
                             )
+                          ) : (
+                            <CListGroupItem
+                              className="justify-content-between text-center bg-primary p-0"
+                              key={i}
+                            >
+                              <CButton
+                                onClick={() => setLarge(!large)}
+                                className="text-white btn-block"
+                              >
+                                Show All Users
+                              </CButton>
+                            </CListGroupItem>
                           )
-                        }
+                        )}
                       </CListGroup>
                     </div>
                   </div>
@@ -218,71 +255,148 @@ export default function AllGroups() {
                       <CModalTitle>{item.Name}</CModalTitle>
                     </CModalHeader>
                     <CModalBody className="text-left">
-                      <select className="form-select" aria-label="Default select example" onChange={showRole}>
+                      <select
+                        className="form-select"
+                        aria-label="Default select example"
+                        onChange={showRole}
+                      >
                         <option value="3">Select Role</option>
                         <option value="1">Admins</option>
                         <option value="2">Members</option>
                         <option value="0">Subscribers</option>
                       </select>
-                      {item.Users.map((e, i) =>
+                      {item.Users.map((e, i) => (
                         <div className="" key={i}>
                           {getRole.val == 3 ? (
                             <div className="row py-2">
                               <div className="col-2 d-flex align-items-center">
-                                <img src={e.avatar} className="img-thumbnail rounded-circle" width="80" />
+                                <img
+                                  src={e.avatar}
+                                  className="img-thumbnail rounded-circle"
+                                  width="80"
+                                />
                               </div>
                               <div className="col-7 d-flex align-items-center">
-                                {e.Role == 1 && <span>{e.firstName} {e.lastName}  <CBadge color="success">Admin</CBadge></span>}
-                                {e.Role == 2 && <span>{e.firstName} {e.lastName}  <CBadge color="info">Member</CBadge></span>}
-                                {e.Role == 0 && <span>{e.firstName} {e.lastName}  <CBadge color="secondary">Subscriber</CBadge></span>}
+                                {e.Role == 1 && (
+                                  <span>
+                                    {e.firstName} {e.lastName}{" "}
+                                    <CBadge color="success">Admin</CBadge>
+                                  </span>
+                                )}
+                                {e.Role == 2 && (
+                                  <span>
+                                    {e.firstName} {e.lastName}{" "}
+                                    <CBadge color="info">Member</CBadge>
+                                  </span>
+                                )}
+                                {e.Role == 0 && (
+                                  <span>
+                                    {e.firstName} {e.lastName}{" "}
+                                    <CBadge color="secondary">
+                                      Subscriber
+                                    </CBadge>
+                                  </span>
+                                )}
                               </div>
                               <div className="col-3 text-right d-flex align-items-center justify-content-end">
                                 <CDropdown className="m-1">
-                                  <CDropdownToggle>
-                                    Action
-                                  </CDropdownToggle>
+                                  <CDropdownToggle>Action</CDropdownToggle>
                                   <CDropdownMenu>
-                                    <CDropdownItem onClick={() => Roles(item.id, e.id, 'admin')}>Make Admin</CDropdownItem>
-                                    <CDropdownItem onClick={() => Roles(item.id, e.id, 'member')}>Make Member</CDropdownItem>
-                                    <CDropdownItem onClick={() => Roles(item.id, e.id, 'subs')}>Make Subscriber</CDropdownItem>
+                                    <CDropdownItem
+                                      onClick={() =>
+                                        Roles(item.id, e.id, "admin")
+                                      }
+                                    >
+                                      Make Admin
+                                    </CDropdownItem>
+                                    <CDropdownItem
+                                      onClick={() =>
+                                        Roles(item.id, e.id, "member")
+                                      }
+                                    >
+                                      Make Member
+                                    </CDropdownItem>
+                                    <CDropdownItem
+                                      onClick={() =>
+                                        Roles(item.id, e.id, "subs")
+                                      }
+                                    >
+                                      Make Subscriber
+                                    </CDropdownItem>
                                     <CDropdownDivider />
-                                    <CDropdownItem onClick={() => deleteUser(item.id, e.id)}>Delete</CDropdownItem>
+                                    <CDropdownItem
+                                      onClick={() => deleteUser(item.id, e.id)}
+                                    >
+                                      Delete
+                                    </CDropdownItem>
                                   </CDropdownMenu>
                                 </CDropdown>
                               </div>
                             </div>
                           ) : (
-                            e.Role == getRole.val &&
-                            <div className="row py-2">
-                              <div className="col-2 d-flex align-items-center">
-                                <img src={e.avatar} className="img-thumbnail rounded-circle" width="80" />
+                            e.Role == getRole.val && (
+                              <div className="row py-2">
+                                <div className="col-2 d-flex align-items-center">
+                                  <img
+                                    src={e.avatar}
+                                    className="img-thumbnail rounded-circle"
+                                    width="80"
+                                  />
+                                </div>
+                                <div className="col-7 d-flex align-items-center">
+                                  <span>
+                                    {e.firstName} {e.lastName}{" "}
+                                    <CBadge color="success">
+                                      {getRole.Role}
+                                    </CBadge>
+                                  </span>
+                                </div>
+                                <div className="col-3 text-right d-flex align-items-center justify-content-end">
+                                  <CDropdown className="m-1">
+                                    <CDropdownToggle>Action</CDropdownToggle>
+                                    <CDropdownMenu>
+                                      <CDropdownItem
+                                        onClick={() =>
+                                          Roles(item.id, e.id, "admin")
+                                        }
+                                      >
+                                        Make Admin
+                                      </CDropdownItem>
+                                      <CDropdownItem
+                                        onClick={() =>
+                                          Roles(item.id, e.id, "member")
+                                        }
+                                      >
+                                        Make Member
+                                      </CDropdownItem>
+                                      <CDropdownItem
+                                        onClick={() =>
+                                          Roles(item.id, e.id, "subs")
+                                        }
+                                      >
+                                        Make Subscriber
+                                      </CDropdownItem>
+                                      <CDropdownDivider />
+                                      <CDropdownItem
+                                        onClick={() =>
+                                          deleteUser(item.id, e.id)
+                                        }
+                                      >
+                                        Delete
+                                      </CDropdownItem>
+                                    </CDropdownMenu>
+                                  </CDropdown>
+                                </div>
                               </div>
-                              <div className="col-7 d-flex align-items-center">
-                                <span>{e.firstName} {e.lastName}  <CBadge color="success">{getRole.Role}</CBadge></span>
-                              </div>
-                              <div className="col-3 text-right d-flex align-items-center justify-content-end">
-                                <CDropdown className="m-1">
-                                  <CDropdownToggle>
-                                    Action
-                                  </CDropdownToggle>
-                                  <CDropdownMenu>
-                                    <CDropdownItem onClick={() => Roles(item.id, e.id, 'admin')}>Make Admin</CDropdownItem>
-                                    <CDropdownItem onClick={() => Roles(item.id, e.id, 'member')}>Make Member</CDropdownItem>
-                                    <CDropdownItem onClick={() => Roles(item.id, e.id, 'subs')}>Make Subscriber</CDropdownItem>
-                                    <CDropdownDivider />
-                                    <CDropdownItem onClick={() => deleteUser(item.id, e.id)}>Delete</CDropdownItem>
-                                  </CDropdownMenu>
-                                </CDropdown>
-                              </div>
-                            </div>
-                          )
-                          }
+                            )
+                          )}
                         </div>
-
-                      )}
+                      ))}
                     </CModalBody>
                     <CModalFooter>
-                      <CButton color="danger" onClick={() => setLarge(!large)}>Close</CButton>
+                      <CButton color="danger" onClick={() => setLarge(!large)}>
+                        Close
+                      </CButton>
                     </CModalFooter>
                   </CModal>
                   <Link to={`/Groups/${item.id}`}>
