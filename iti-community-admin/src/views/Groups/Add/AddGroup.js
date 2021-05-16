@@ -21,20 +21,17 @@ const AddGroup = () => {
   if (localStorage.getItem("adminToken") == undefined) history.push("/login");
   const [Group, setGroup] = useState({
     Name: "",
-    About: "",
-    ImgURL: "",
-    admin: [""],
-    members: [""],
-    subscriber: [""],
-    createdDate: new Date(),
+    Description: "",
+    Img: "",
+    Specialty: "",
+    CreatedDate: new Date(),
   });
   let flag = false
-  const [progress, setprogress] = useState(100)
+  const [progress, setprogress] = useState(0)
+  console.log(progress)
   if (progress >= 100) {
     flag = true
   }
-  const [files, setfiles] = useState('')
-  // const [Img, setImg] = useState('')
 
   const handleForm = async (e) => {
     switch (e.target.name) {
@@ -45,38 +42,60 @@ const AddGroup = () => {
         });
         break;
 
-      case "About":
+      case "Description":
         setGroup({
           ...Group,
-          About: e.target.value,
+          Description: e.target.value,
+        });
+        break;
+      case "Specialty":
+        setGroup({
+          ...Group,
+          Specialty: e.target.value,
         });
         break;
       case "URL":
         if (e.target.files.length > 0) {
           const file = e.target.files[0]
           const storageRef = await upload.ref(`GroupImg/${file.name}`)
-          // .child((Math.random() * 1024 * 1024).toString(36).substring(2) + file.name).put(file).then()
-          storageRef.put(file).on("state_changed", await ((e) => {
-            upload.ref('GroupImg').child(file.name).getDownloadURL().then((url) => {
-              const pro = (e.bytesTransferred / e.totalBytes) * 100
-              setprogress({
-                pro: pro,
-                msg: 'Wait To Upload Your Image'
-              })
-
-              if (flag) {
+          const prog = storageRef.put(file)
+          const pro = ((await prog).bytesTransferred / (await prog).totalBytes) * 100
+          setprogress({
+            pro: pro,
+            msg: 'Wait To Upload Your Image'
+          })
+          prog.then(e => {
+            if (flag) {
+              e.ref.getDownloadURL().then((url) => {
+                console.log(url)
                 setGroup({
                   ...Group,
-                  ImgURL: url,
+                  Img: url,
                 })
-              }
-            })
-          }))
+              })
+            }
+          })
+
+          // .on("state_changed", (async (e) => {
+          //   upload.ref('GroupImg').child(file.name).getDownloadURL().then((url) => {
+          //     const pro = (e.bytesTransferred / e.totalBytes) * 100
+          //     setprogress({
+          //       pro: pro,
+          //       msg: 'Wait To Upload Your Image'
+          //     })
+          //     if (flag) {
+          //       setGroup({
+          //         ...Group,
+          //         Img: url,
+          //       })
+          //     }
+          //   })
+          // }))
 
         } else {
           setGroup({
             ...Group,
-            ImgURL: '',
+            Img: '',
           })
         }
         break;
@@ -107,26 +126,24 @@ const AddGroup = () => {
               Description:
             </CLabel>
             <CTextarea
-              name="About"
+              name="Description"
               id="textarea-input"
               rows="9"
               placeholder="Content..."
               onChange={handleForm}
-              value={Group.About}
+              value={Group.Description}
             />
-            {/* <CLabel htmlFor="img" className="pt-2">
-              Img URL:
+            <CLabel htmlFor="Specialty" className="pt-2">
+              Group Specialty:
             </CLabel>
             <CInput
-              id="img"
-              placeholder="Enter Group Img URL"
-              required
-              type="file"
-              className="pb-5"
-              name="URL"
+              id="Specialty"
+              placeholder="Type Group Specialty"
+              name="Specialty"
               onChange={handleForm}
-              value={Group.ImgURL}
-            /> */}
+              value={Group.Specialty}
+              required
+            />
             <CFormGroup row>
               <CLabel col md="3" htmlFor="file-input">Group Image</CLabel>
               <CCol xs="12" md="9">
@@ -141,11 +158,11 @@ const AddGroup = () => {
                     type="button"
                     color="info"
                     size="sm"
-                    disabled={progress.pro < 100 ? true : false}
+                    disabled={flag ? true : false}
                     className="w-25 mx-1"
                     onClick={addNew}
                   >
-                    {progress.pro < 100 ? progress.msg : 'Add'}
+                    {flag ? progress.msg : 'Add'}
                   </CButton>
                 </Link>
                 <CButton

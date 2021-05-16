@@ -1,15 +1,20 @@
-import { CButton, CCardBody, CCollapse, CDataTable, CImg } from "@coreui/react";
+import { CBadge, CButton, CCardBody, CCollapse, CDataTable, CDropdown, CDropdownDivider, CDropdownItem, CDropdownMenu, CDropdownToggle, CImg, CListGroup, CListGroupItem, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from "@coreui/react";
+import CIcon from '@coreui/icons-react';
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { delGroup, getGroupData } from "src/Services/GroupServices";
+import { delGroup, delUser, editUser, getGroupData, getUsers } from "src/Services/GroupServices";
 import { useHistory } from "react-router";
 export default function AllGroups() {
   const history = useHistory();
   if (localStorage.getItem("adminToken") == undefined) history.push("/login");
+
   const [group, setGroup] = useState([]);
 
+  var users = [];
+  var sub;
+  var sub2;
   useEffect(() => {
-    getGroupData().onSnapshot((res) => {
+    sub = getGroupData().onSnapshot((res) => {
       var arr = [];
       var data = [];
       res.forEach((e) => {
@@ -20,27 +25,42 @@ export default function AllGroups() {
       });
 
       data.map((g) => {
-        var day = new Date(g.data.createdDate * 1000).getDate();
-        var month = new Date(g.data.createdDate * 1000).getMonth() + 1;
-
-        var year = new Date(g.data.createdDate * 1000).getFullYear() - 1969;
-        arr.push({
-          id: g.id,
-          Name: g.data.Name,
-          About: g.data.About,
-          membersNo: g.data.members.length,
-          members: g.data.members,
-          URL: g.data.ImgURL,
-          CreatedAt: day + "-" + month + "-" + year,
-        });
-        let viewData = [...arr];
-        setGroup(viewData);
-        return true;
+        var day = new Date(g.data.CreatedDate * 1000).getDate();
+        var month = new Date(g.data.CreatedDate * 1000).getMonth() + 1;
+        var year = new Date(g.data.CreatedDate * 1000).getFullYear() - 1969;
+        sub2 = getUsers(g.id).onSnapshot(res => {
+          users = [];
+          res.forEach(e => {
+            users.push({
+              id: e.id,
+              ...(e.data())
+            })
+          })
+          arr = arr.filter(e => e.id != g.id)
+          arr.push({
+            id: g.id,
+            Name: g.data.Name,
+            About: g.data.Description,
+            URL: g.data.Img,
+            CreatedAt: day + "-" + month + "-" + year,
+            Specialty: g.data.Specialty,
+            Users: users
+          });
+          let viewData = [...arr];
+          setGroup(viewData);
+          return true;
+        })
       });
     });
+    return () => {
+      sub()
+      sub2()
+    }
   }, []);
 
   const [details, setDetails] = useState([]);
+
+  const [large, setLarge] = useState(false)
 
   const toggleDetails = (index) => {
     const Position = details.indexOf(index);
@@ -55,8 +75,9 @@ export default function AllGroups() {
 
   const fields = [
     { key: "Name", _style: { width: "40%" } },
+    "Specialty",
     "CreatedAt",
-    { key: "membersNo", _style: { width: "20%" } },
+    // { key: "membersNo", _style: { width: "20%" } },
     {
       key: "show_details",
       label: "",
@@ -68,6 +89,14 @@ export default function AllGroups() {
 
   function deleteGroup(id) {
     delGroup(id);
+  }
+
+  function deleteUser(id, user) {
+    delUser(id, user)
+  }
+
+  function Roles(id, user, role) {
+    editUser(id, user, role)
   }
 
   return (
@@ -115,8 +144,76 @@ export default function AllGroups() {
                   ) : (
                     <CImg src={item.URL} width="400" className="mb-2" />
                   )}
-                  <h6>About This Group:</h6>
-                  <p className="text-muted">{item.About}</p>
+                  <div className="row text-left">
+                    <div className="col-6">
+                      <h6>Description :</h6>
+                      <p className="text-muted">{item.About}</p>
+                    </div>
+                    <div className="col-6">
+                      <h6>Admins :</h6>
+                      <CListGroup className="pb-2">
+                        {
+                          item.Users.map((e, i) =>
+                            i <= 2 ? (
+                              e.Role == 1 &&
+                              <CListGroupItem className="justify-content-between" key={i}>
+                                {e.firstName} {e.lastName}
+                                <span className="float-right  p-0">
+                                  <CButton className="p-0 text-danger" onClick={() => deleteUser(item.id, e.id)}>
+                                    <CIcon name="cil-trash" className="p-0" />
+                                  </CButton>
+                                </span>
+                              </CListGroupItem>
+                            ) : (
+                              <CListGroupItem className="justify-content-between text-center bg-primary p-0" key={i}>
+                                <CButton onClick={() => setLarge(!large)} className="text-white btn-block">Show All Users</CButton>
+                              </CListGroupItem>
+                            )
+                          )
+                        }
+                      </CListGroup>
+                    </div>
+                  </div>
+                  <CModal
+                    show={large}
+                    onClose={() => setLarge(!large)}
+                    size="lg"
+                  >
+                    <CModalHeader closeButton>
+                      <CModalTitle>{item.Name}</CModalTitle>
+                    </CModalHeader>
+                    <CModalBody className="text-left">
+                      {item.Users.map((e, i) =>
+                        <div className="row py-2" key={i}>
+                          <div className="col-2 d-flex align-items-center">
+                            <img src={e.avatar} className="img-thumbnail rounded-circle" width="80" />
+                          </div>
+                          <div className="col-7 d-flex align-items-center">
+                            {e.Role == 1 && <span>{e.firstName} {e.lastName}  <CBadge color="success">Admin</CBadge></span>}
+                            {e.Role == 2 && <span>{e.firstName} {e.lastName}  <CBadge color="info">Member</CBadge></span>}
+                            {e.Role == 0 && <span>{e.firstName} {e.lastName}  <CBadge color="secondary">Subscriber</CBadge></span>}
+                          </div>
+                          <div className="col-3 text-right d-flex align-items-center justify-content-end">
+                            <CDropdown className="m-1">
+                              <CDropdownToggle>
+                                Action
+                            </CDropdownToggle>
+                              <CDropdownMenu>
+                                <CDropdownItem onClick={() => Roles(item.id, e.id, 'admin')}>Make Admin</CDropdownItem>
+                                <CDropdownItem onClick={() => Roles(item.id, e.id, 'member')}>Make Member</CDropdownItem>
+                                <CDropdownItem onClick={() => Roles(item.id, e.id, 'subs')}>Make Subscriber</CDropdownItem>
+                                <CDropdownDivider />
+                                <CDropdownItem onClick={() => deleteUser(item.id, e.id)}>Delete</CDropdownItem>
+                              </CDropdownMenu>
+                            </CDropdown>
+                          </div>
+                        </div>
+                      )}
+                    </CModalBody>
+                    <CModalFooter>
+                      <CButton color="danger" onClick={() => setLarge(!large)}>Close</CButton>
+                    </CModalFooter>
+                  </CModal>
                   <Link to={`/Groups/${item.id}`}>
                     <CButton size="sm" color="info">
                       Edit

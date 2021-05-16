@@ -15,14 +15,13 @@ const EditGroup = () => {
   const history = useHistory();
   if (localStorage.getItem("adminToken") == undefined) history.push("/login");
   const { id } = useParams();
-  console.log(id )
+  console.log(id)
   const [Group, setGroup] = useState({
     Name: "",
-    About: "",
-    ImgURL: "",
-    // admin: [''],
-    // members: [''],
-    // subscriber: [''],
+    Description: "",
+    Img: "",
+    Specialty: "",
+
   });
 
   useEffect(() => {
@@ -32,8 +31,9 @@ const EditGroup = () => {
         const data = doc.data();
         setGroup({
           Name: data.Name,
-          About: data.About,
-          ImgURL: data.ImgURL,
+          Description: data.Description,
+          Img: data.Img,
+          Specialty: data.Specialty
         });
       } else {
         console.log("Not Founded");
@@ -50,16 +50,22 @@ const EditGroup = () => {
         });
         break;
 
-      case "About":
+      case "Description":
         setGroup({
           ...Group,
           About: e.target.value,
         });
         break;
+      case "Specialty":
+        setGroup({
+          ...Group,
+          Specialty: e.target.value,
+        });
+        break;
       case "URL":
         setGroup({
           ...Group,
-          ImgURL: e.target.value,
+          Img: e.target.value,
         });
         break;
       default:
@@ -73,13 +79,15 @@ const EditGroup = () => {
       .doc(id)
       .update({
         Name: Group.Name,
-        About: Group.About,
-        ImgURL: Group.ImgURL,
+        Description: Group.Description,
+        Img: Group.Img,
+        Specialty: Group.Specialty
       })
       .then(
         (document.getElementById("name").value = ""),
         (document.getElementById("textarea-input").value = ""),
         (document.getElementById("img").value = ""),
+        (document.getElementById("Specialty").value = ""),
         history.push("/Groups/All")
       );
   };
@@ -100,19 +108,30 @@ const EditGroup = () => {
               placeholder="Enter Group name"
               required
             />
+            <CLabel htmlFor="Specialty" className="pt-2">
+              Specialty:
+            </CLabel>
+            <CInput
+              id="Specialty"
+              name="Specialty"
+              placeholder="Enter Group Specialty"
+              required
+              onChange={handleForm}
+              value={Group.Specialty}
+            />
             <CLabel htmlFor="textarea-input" className="pt-2">
               Description:
             </CLabel>
             <CTextarea
-              name="About"
+              name="Description"
               id="textarea-input"
               rows="9"
               placeholder="Content..."
               onChange={handleForm}
-              value={Group.About}
+              value={Group.Description}
             />
             <CLabel htmlFor="img" className="pt-2">
-              Img URL:
+              Img:
             </CLabel>
             <CInput
               id="img"
@@ -120,7 +139,7 @@ const EditGroup = () => {
               placeholder="Enter Group Img URL"
               required
               onChange={handleForm}
-              value={Group.ImgURL}
+              value={Group.Img}
             />
             <CCardFooter className="mt-3 rounded">
               <div className="text-center">
