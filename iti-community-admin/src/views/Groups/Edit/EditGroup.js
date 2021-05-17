@@ -8,11 +8,13 @@ import {
   CInput,
   CInputFile,
   CLabel,
+  CSelect,
   CTextarea,
 } from "@coreui/react";
 import { useHistory, useParams } from "react-router";
 import { getGroupData } from "src/Services/GroupServices";
 import { upload } from "src/firebase";
+import { getTracks } from "src/Services/TrackService";
 
 const EditGroup = () => {
   const history = useHistory();
@@ -23,9 +25,10 @@ const EditGroup = () => {
     Description: "",
     Img: "",
     Specialty: "",
-
   });
   const [progress, setprogress] = useState(100)
+  const [track, setTrack] = useState([])
+
   useEffect(() => {
     const ref = getGroupData().doc(id).get();
     ref.then((doc) => {
@@ -41,6 +44,16 @@ const EditGroup = () => {
         console.log("Not Founded");
       }
     });
+    var arr = []
+    getTracks().onSnapshot(res => {
+      res.forEach(e => {
+        arr.push({
+          id: e.id,
+          ...(e.data())
+        })
+      })
+      setTrack(arr)
+    })
   }, []);
 
   const handleForm = async (e) => {
@@ -93,10 +106,6 @@ const EditGroup = () => {
             Img: Group.Img,
           })
         }
-        // setGroup({
-        //   ...Group,
-        //   Img: e.target.value,
-        // });
         break;
       default:
         break;
@@ -117,7 +126,6 @@ const EditGroup = () => {
         (document.getElementById("name").value = ""),
         (document.getElementById("textarea-input").value = ""),
         (document.getElementById("img").value = ""),
-        (document.getElementById("Specialty").value = ""),
         history.push("/Groups/All")
       );
   };
@@ -138,17 +146,7 @@ const EditGroup = () => {
               placeholder="Enter Group name"
               required
             />
-            <CLabel htmlFor="Specialty" className="pt-2">
-              Specialty:
-            </CLabel>
-            <CInput
-              id="Specialty"
-              name="Specialty"
-              placeholder="Enter Group Specialty"
-              required
-              onChange={handleForm}
-              value={Group.Specialty}
-            />
+
             <CLabel htmlFor="textarea-input" className="pt-2">
               Description:
             </CLabel>
@@ -160,17 +158,12 @@ const EditGroup = () => {
               onChange={handleForm}
               value={Group.Description}
             />
-            {/* <CLabel htmlFor="img" className="pt-2">
-              Img:
-            </CLabel>
-            <CInput
-              id="img"
-              name="URL"
-              placeholder="Enter Group Img"
-              required
-              onChange={handleForm}
-              value={Group.Img}
-            /> */}
+            <CLabel htmlFor="track" className="pt-2">Group Specialty :</CLabel>
+            <CSelect custom name="Specialty" id="track" onChange={handleForm} value={Group.Specialty}>
+              <option value="No Track">Choose...</option>
+              {track.map((t) => <option key={t.id} value={t.name}>{t.name}</option>)}
+            </CSelect>
+
             <img src={Group.Img} width="400" className="py-4" />
             <CFormGroup row>
               <CLabel col md="3" htmlFor="file-input">Change Group Image</CLabel>

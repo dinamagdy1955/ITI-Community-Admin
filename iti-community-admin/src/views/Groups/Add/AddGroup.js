@@ -7,13 +7,15 @@ import {
   CInput,
   CInputFile,
   CLabel,
+  CSelect,
   CTextarea,
 } from "@coreui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { addNewGroup } from "src/Services/GroupServices";
 import { useHistory } from "react-router";
 import { upload } from "src/firebase";
+import { getTracks } from "src/Services/TrackService";
 
 
 const AddGroup = () => {
@@ -26,6 +28,21 @@ const AddGroup = () => {
     Specialty: "",
     CreatedDate: new Date(),
   });
+
+  const [track, setTrack] = useState([])
+  var arr = []
+  useEffect(() => {
+    getTracks().onSnapshot(res => {
+      res.forEach(e => {
+        arr.push({
+          id: e.id,
+          ...(e.data())
+        })
+      })
+      setTrack(arr)
+    })
+  }, [])
+  console.log(track)
   const [progress, setprogress] = useState(100)
   const handleForm = async (e) => {
     switch (e.target.name) {
@@ -112,21 +129,15 @@ const AddGroup = () => {
               onChange={handleForm}
               value={Group.Description}
             />
-            <CLabel htmlFor="Specialty" className="pt-2">
-              Group Specialty:
-            </CLabel>
-            <CInput
-              id="Specialty"
-              placeholder="Type Group Specialty"
-              name="Specialty"
-              onChange={handleForm}
-              value={Group.Specialty}
-              required
-            />
+            <CLabel htmlFor="track" className="pt-2">Group Specialty :</CLabel>
+            <CSelect custom name="Specialty" id="track" onChange={handleForm}>
+              <option value="No Track">Choose...</option>
+              {track.map((t) => <option key={t.id} value={t.name}>{t.name}</option>)}
+            </CSelect>
             <CFormGroup row>
-              <CLabel col md="3" htmlFor="file-input">Group Image</CLabel>
+              <CLabel col md="3" htmlFor="file-input" className="pt-2">Group Image</CLabel>
               <CCol xs="12" md="9">
-                <CInputFile id="file-input" name="file-input" id="img" name="URL" onChange={handleForm} />
+                <CInputFile id="file-input" name="file-input" id="img" name="URL" onChange={handleForm} className="pt-2" />
               </CCol>
             </CFormGroup>
             <CCardFooter className="mt-3 rounded">
