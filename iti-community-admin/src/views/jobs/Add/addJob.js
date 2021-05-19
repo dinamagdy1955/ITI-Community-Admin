@@ -12,47 +12,181 @@ import {
   CInput,
   CLabel,
   CRow,
+  CInputFile,
+  CTextarea,
+  CSelect,
+  CSwitch,
 } from "@coreui/react";
-import CIcon from "@coreui/icons-react";
 import { db } from "src/firebase";
+import { upload } from "src/firebase";
 
 const BasicForms = () => {
   const history = useHistory();
   if (localStorage.getItem("adminToken") == undefined) history.push("/login");
+  const [notspec, setNotSpec] = useState(false);
+  const [progress, setprogress] = useState(100);
   const [job, setJob] = useState({
-    company: "ITI",
-    position: "",
+    company: {
+      en: "",
+      ar: "",
+    },
+    position: {
+      en: "",
+      ar: "",
+    },
+    seniorityLevel: {
+      en: "",
+      ar: "",
+    },
+    description: {
+      en: "",
+      ar: "",
+    },
+    location: {
+      en: "",
+      ar: "",
+    },
+    employmentType: {
+      en: "FullTime",
+      ar: "دوام كامل",
+    },
+    worksFrom: {
+      en: "onSite",
+      ar: "من موقع الشركة",
+    },
+    companyLogoAvatar: "",
     postedDate: new Date(),
-    level: "",
-    description: "",
-    status: "",
+    closingDate: null,
   });
 
-  const handleForm = (e) => {
+  const handleForm = async (e) => {
     switch (e.target.name) {
-      case "position":
+      case "companyEn":
         setJob({
           ...job,
-          position: e.target.value,
+          company: { ...job.company, en: e.target.value },
         });
         break;
-
-      case "level":
+      case "positionEn":
         setJob({
           ...job,
-          level: e.target.value,
+          position: { ...job.position, en: e.target.value },
         });
         break;
-      case "description":
+      case "levelEn":
         setJob({
           ...job,
-          description: e.target.value,
+          seniorityLevel: { ...job.seniorityLevel, en: e.target.value },
         });
         break;
-      case "status":
+      case "descriptionEn":
         setJob({
           ...job,
-          status: e.target.value,
+          description: { ...job.description, en: e.target.value },
+        });
+        break;
+      case "locationEn":
+        setJob({
+          ...job,
+          location: { ...job.location, en: e.target.value },
+        });
+        break;
+      case "companyAr":
+        setJob({
+          ...job,
+          company: { ...job.company, ar: e.target.value },
+        });
+        break;
+      case "positionAr":
+        setJob({
+          ...job,
+          position: { ...job.position, ar: e.target.value },
+        });
+        break;
+      case "levelAr":
+        setJob({
+          ...job,
+          seniorityLevel: { ...job.seniorityLevel, ar: e.target.value },
+        });
+        break;
+      case "descriptionAr":
+        setJob({
+          ...job,
+          description: { ...job.description, ar: e.target.value },
+        });
+        break;
+      case "locationAr":
+        setJob({
+          ...job,
+          location: { ...job.location, ar: e.target.value },
+        });
+        break;
+      case "employmentType":
+        if (e.target.value == "FullTime")
+          setJob({
+            ...job,
+            employmentType: { en: e.target.value, ar: "دوام كامل" },
+          });
+        else if (e.target.value == "PartTime")
+          setJob({
+            ...job,
+            employmentType: { en: e.target.value, ar: "دوام جزئى" },
+          });
+        break;
+      case "worksFrom":
+        if (e.target.value == "onSite")
+          setJob({
+            ...job,
+            worksFrom: { en: e.target.value, ar: "من موقع الشركة" },
+          });
+        else if (e.target.value == "Remotly")
+          setJob({
+            ...job,
+            worksFrom: { en: e.target.value, ar: "عن بعد" },
+          });
+        break;
+      case "companyLogoAvatar":
+        if (e.target.files.length > 0) {
+          setprogress({
+            pro: 0,
+            msg: "Wait To Upload Your Image",
+          });
+          const file = e.target.files[0];
+          const storageRef = await upload.ref(`CompanyLogo/${file.name}`);
+          const prog = storageRef.put(file);
+          const pro =
+            ((await prog).bytesTransferred / (await prog).totalBytes) * 100;
+          setprogress({
+            pro: pro,
+            msg: "Wait To Upload Your Image",
+          });
+          prog.then((e) => {
+            e.ref.getDownloadURL().then((url) => {
+              console.log(url);
+              setJob({
+                ...job,
+                companyLogoAvatar: url,
+              });
+            });
+          });
+        } else {
+          setJob({
+            ...job,
+            companyLogoAvatar: "",
+          });
+        }
+        break;
+      case "closingDate":
+        setJob({
+          ...job,
+          closingDate: e.target.value,
+        });
+        break;
+      case "notSpecifiedYet":
+        setNotSpec(notspec);
+        setJob({
+          ...job,
+          closingDate: null,
         });
         break;
     }
@@ -64,59 +198,116 @@ const BasicForms = () => {
   return (
     <>
       <CRow>
-        <CCol xs="12" sm="6">
+        <CCol xs="12">
           <CCard>
             <CForm action="" method="post" className="form-horizontal">
+              <CCardHeader className="d-flex">
+                <span className="w-75">Add new Job</span>
+                <span className="w-50" style={{ textAlign: "right" }}>
+                  إضافة وظيفة جديدة
+                </span>
+              </CCardHeader>
               <CFormGroup>
-                <CCardHeader>Add a Job</CCardHeader>
                 <CCardBody>
                   <CRow>
-                    <CCol xs="12">
+                    <CCol xs="5">
                       <CFormGroup>
-                        <CLabel htmlFor="name">Position</CLabel>
+                        <CLabel>Company Name</CLabel>
                         <CInput
-                          name="position"
+                          name="companyEn"
+                          placeholder="Enter Company Name"
+                          onChange={handleForm}
+                          required
+                        />
+                      </CFormGroup>
+                      <CFormGroup>
+                        <CLabel>Job Position</CLabel>
+                        <CInput
+                          name="positionEn"
                           placeholder="Enter the position of the annonounced job"
                           onChange={handleForm}
                           required
                         />
                       </CFormGroup>
-                    </CCol>
-                  </CRow>
-                  <CRow>
-                    <CCol xs="12">
                       <CFormGroup>
-                        <CLabel htmlFor="name">Level</CLabel>
+                        <CLabel>Seniority Level</CLabel>
                         <CInput
-                          name="level"
-                          placeholder="Enter the position level"
+                          name="levelEn"
+                          placeholder="Enter the seniority level of job"
+                          onChange={handleForm}
+                          required
+                        />
+                      </CFormGroup>
+                      <CFormGroup>
+                        <CLabel>Description</CLabel>
+                        <CTextarea
+                          name="descriptionEn"
+                          placeholder="Enter the description of job requirment"
+                          rows="5"
+                          onChange={handleForm}
+                          required
+                        ></CTextarea>
+                      </CFormGroup>
+                      <CFormGroup>
+                        <CLabel>Location</CLabel>
+                        <CInput
+                          name="locationEn"
+                          placeholder="Enter the location of company"
                           onChange={handleForm}
                           required
                         />
                       </CFormGroup>
                     </CCol>
-                  </CRow>
-                  <CRow>
-                    <CCol xs="12">
+                    <CCol xs="2"></CCol>
+                    <CCol xs="5" style={{ textAlign: "right" }}>
                       <CFormGroup>
-                        <CLabel htmlFor="name">Description</CLabel>
+                        <CLabel>اسم الشركة</CLabel>
                         <CInput
-                          name="description"
-                          placeholder="Enter the description"
+                          name="companyAr"
+                          placeholder="ادخل اسم الشركة"
                           onChange={handleForm}
+                          style={{ textAlign: "right" }}
                           required
                         />
                       </CFormGroup>
-                    </CCol>
-                  </CRow>
-                  <CRow>
-                    <CCol xs="12">
                       <CFormGroup>
-                        <CLabel htmlFor="name">Status</CLabel>
+                        <CLabel>المركز الوظيفي</CLabel>
                         <CInput
-                          name="status"
-                          placeholder="Enter the job status"
+                          name="positionAr"
+                          placeholder="ادخل المركز الوظيفي للوظيفة المتاحة"
                           onChange={handleForm}
+                          style={{ textAlign: "right" }}
+                          required
+                        />
+                      </CFormGroup>
+                      <CFormGroup>
+                        <CLabel>المستوى الوظيفي</CLabel>
+                        <CInput
+                          name="levelAr"
+                          placeholder="ادخل المستوى الوظيفي للوظيفة المتاحة"
+                          onChange={handleForm}
+                          style={{ textAlign: "right" }}
+                          required
+                        />
+                      </CFormGroup>
+                      <CFormGroup>
+                        <CLabel>وصف متطلبات الوظيفة</CLabel>
+                        <CTextarea
+                          name="descriptionAr"
+                          placeholder="ادخل متطلبات الوظيفة"
+                          rows="5"
+                          onChange={handleForm}
+                          style={{ textAlign: "right" }}
+                          required
+                        ></CTextarea>
+                      </CFormGroup>
+                      <CFormGroup>
+                        <CLabel>موقع مقر الشركة</CLabel>
+                        <CInput
+                          name="locationAr"
+                          placeholder="ادخل موقع مقر الشركة"
+                          onChange={handleForm}
+                          style={{ textAlign: "right" }}
                           required
                         />
                       </CFormGroup>
@@ -124,11 +315,93 @@ const BasicForms = () => {
                   </CRow>
                 </CCardBody>
                 <CCardFooter>
-                  <CButton size="sm" color="success" onClick={() => AddJob()}>
-                    <CIcon name="cil-scrubber" /> Submit
+                  <CRow>
+                    <CCol>
+                      <CFormGroup>
+                        <CLabel>Employment Type</CLabel>
+                        <CSelect
+                          custom
+                          size="md"
+                          name="employmentType"
+                          onChange={handleForm}
+                        >
+                          <option value="FullTime">FullTime</option>
+                          <option value="PartTime">PartTime</option>
+                        </CSelect>
+                      </CFormGroup>
+                    </CCol>
+                    <CCol xs="2"></CCol>
+                    <CCol>
+                      <CFormGroup>
+                        <CLabel>Works From</CLabel>
+                        <CSelect
+                          custom
+                          size="md"
+                          name="worksFrom"
+                          onChange={handleForm}
+                        >
+                          <option value="onSite">On site</option>
+                          <option value="Remotly">Remotly</option>
+                        </CSelect>
+                      </CFormGroup>
+                    </CCol>
+                  </CRow>
+                  <CRow>
+                    <CCol>
+                      <CFormGroup>
+                        <CLabel>Company Logo Avatar</CLabel>
+                        <CInputFile
+                          id="img"
+                          name="companyLogoAvatar"
+                          onChange={handleForm}
+                        />
+                      </CFormGroup>
+                    </CCol>
+                    <CCol xs="2"></CCol>
+                    <CCol>
+                      <CLabel>Closing Date</CLabel>
+                      <CRow>
+                        <CCol>
+                          <CInput
+                            type="date"
+                            name="closingDate"
+                            placeholder="date"
+                            disabled={notspec}
+                            onChange={handleForm}
+                          />
+                        </CCol>
+                        <CCol>
+                          <CSwitch
+                            name="notSpecifiedYet"
+                            className="mr-2 mt-2"
+                            color="primary"
+                            onChange={handleForm}
+                          />
+                          <CLabel>Not specified yet</CLabel>
+                        </CCol>
+                      </CRow>
+                    </CCol>
+                  </CRow>
+                </CCardFooter>
+                <CCardFooter className="d-flex justify-content-center">
+                  <CButton
+                    id="addRow"
+                    type="button"
+                    color="info"
+                    size="sm"
+                    disabled={progress.pro < 100 ? true : false}
+                    className="w-25 mx-1"
+                    onClick={AddJob}
+                  >
+                    {progress.pro < 100 ? progress.msg : "Add"}
                   </CButton>
-                  <CButton type="reset" size="sm" color="danger">
-                    <CIcon name="cil-ban" /> Reset
+                  <CButton
+                    type="reset"
+                    size="sm"
+                    color="danger"
+                    className="w-25 mx-1"
+                  >
+                    Reset
                   </CButton>
                 </CCardFooter>
               </CFormGroup>
