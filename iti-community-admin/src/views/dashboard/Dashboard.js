@@ -11,6 +11,8 @@ const Dashboard = () => {
   const [tracks, setTracks] = useState(0);
   const [branches, setBranches] = useState(0);
   const [jobs, setJobs] = useState(0);
+  const [admins, setAdmins] = useState(0);
+
   useEffect(() => {
     db.collection("users-basics").onSnapshot((res) => {
       setUsers(res.size);
@@ -26,6 +28,9 @@ const Dashboard = () => {
     });
     db.collection("jobs").onSnapshot((res) => {
       setJobs(res.size);
+    });
+    db.collection("admins").onSnapshot((res) => {
+      setAdmins(res.size);
     });
   }, []);
   return (
@@ -94,7 +99,7 @@ const Dashboard = () => {
             to="/jobs/showjobs"
             style={{ textDecorationLine: "none", color: "white" }}
           >
-            <CCard color="gradient-primary" className="text-white text-center">
+            <CCard color="gradient-dark" className="text-white text-center">
               <CCardHeader className="font-weight-bolder">
                 <h2>Jobs</h2>
               </CCardHeader>
@@ -103,6 +108,21 @@ const Dashboard = () => {
               </CCardBody>
             </CCard>
           </Link>
+        </CCol>
+        <CCol xs="12" sm="6" md="4">
+          {/* <Link
+            to="/jobs/showjobs"
+            style={{ textDecorationLine: "none", color: "white" }}
+          > */}
+          <CCard color="gradient-info" className="text-white text-center">
+            <CCardHeader className="font-weight-bolder">
+              <h2>Admins</h2>
+            </CCardHeader>
+            <CCardBody className="fs-6">
+              <h3>{admins}</h3>
+            </CCardBody>
+          </CCard>
+          {/* </Link> */}
         </CCol>
       </CRow>
     </>

@@ -68,6 +68,7 @@ const routes = [
   },
   { path: "/jobs/addjob", exact: true, name: "Add Jobs", component: AddJob },
   { path: "/jobs/:id", exact: true, name: "Edit Job", component: EditJob },
+  { path: "**", redirectTo: "/404" },
 ];
 
 export default routes;

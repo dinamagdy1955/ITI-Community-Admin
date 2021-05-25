@@ -118,7 +118,11 @@ export default function AddTrack() {
               </Form.Group>
 
               <Form.Row>
-                <Form.Group controlId="formGridTSN" style={{ margin: "5px" }}>
+                <Form.Group
+                  className="col"
+                  controlId="formGridTSN"
+                  style={{ margin: "5px" }}
+                >
                   <Form.Label>NO.Students</Form.Label>
                   <Form.Control
                     type="number"
@@ -129,7 +133,11 @@ export default function AddTrack() {
                   />
                 </Form.Group>
 
-                <Form.Group controlId="formGridTTT" style={{ margin: "5px" }}>
+                <Form.Group
+                  className="col"
+                  controlId="formGridTTT"
+                  style={{ margin: "5px" }}
+                >
                   <Form.Label>Track Total Time</Form.Label>
 
                   <select

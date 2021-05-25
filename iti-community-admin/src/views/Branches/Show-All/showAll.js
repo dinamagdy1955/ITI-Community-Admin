@@ -41,9 +41,6 @@ export default function ShowAll() {
     });
   }, []);
 
- 
-
-
   function Delete(id) {
     /*console.log('deleted')*/
     var x = prompt(
@@ -62,7 +59,12 @@ export default function ShowAll() {
     "no_students",
     "no_instructors",
     "manager",
-    "Delete",
+    {
+      key: "Delete",
+      label: "",
+      sorter: false,
+      filter: false,
+    },
   ];
 
   return (
@@ -78,6 +80,9 @@ export default function ShowAll() {
                 hover
                 striped
                 bordered
+                columnFilter
+                tableFilter
+                sorter
                 size="sm"
                 itemsPerPage={5}
                 pagination
@@ -87,10 +92,7 @@ export default function ShowAll() {
                       <Button variant="danger" onClick={() => Delete(item.id)}>
                         Delete
                       </Button>{" "}
-                      <Link
-                        to= {`/branches/${item.id}`}
-                       >
-                      
+                      <Link to={`/branches/${item.id}`}>
                         <Button variant="success">Edit</Button>
                       </Link>
                     </td>

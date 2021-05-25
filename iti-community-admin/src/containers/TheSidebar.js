@@ -10,6 +10,7 @@ import {
   CSidebarMinimizer,
   CSidebarNavDropdown,
   CSidebarNavItem,
+  CImg,
 } from "@coreui/react";
 
 import CIcon from "@coreui/icons-react";
@@ -26,17 +27,16 @@ const TheSidebar = () => {
       show={show}
       onShowChange={(val) => dispatch({ type: "set", sidebarShow: val })}
     >
-      <CSidebarBrand className="d-md-down-none" to="/">
-        {/* <CIcon
-          className="c-sidebar-brand-full"
-          name="logo-negative"
-          height={35}
+      <CSidebarBrand
+        className="d-md-down-none"
+        to="/"
+        className="d-flex"
+        style={{ flexDirection: "column", textDecorationLine: "none" }}
+      >
+        <CImg
+          src="https://firebasestorage.googleapis.com/v0/b/iti-community.appspot.com/o/iti-logo.png?alt=media&token=58c3d30a-5f28-4186-9777-64de2245f8d2"
+          width="70"
         />
-        <CIcon
-          className="c-sidebar-brand-minimized"
-          name="sygnet"
-          height={35}
-        /> */}
         <h3 className="text-center">ITI Community</h3>
       </CSidebarBrand>
       <CSidebarNav>

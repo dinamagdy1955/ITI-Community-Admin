@@ -17,17 +17,22 @@ export default function UsersRequests() {
   useEffect(() => {
     var arr = [];
     var l = [];
-    db.collection("users-basics").onSnapshot((res) => {
-      arr = [];
-      l = [];
-      setUsers([]);
-      console.log(res.docs.length);
-      if (res.docs.length != 0) {
+    db.collection("users-basics")
+      .where("isAccepted", "==", false)
+      .where("isRemoved", "==", false)
+      .onSnapshot((res) => {
+        arr = [];
+        l = [];
+        setUsers([]);
         res.forEach((e) => {
-          if (!e.data().isAccepted && !e.data().isRemoved) {
-            db.collection("users-details")
-              .doc(e.id)
-              .onSnapshot((response) => {
+          db.collection("users-details")
+            .doc(e.id)
+            .onSnapshot((response) => {
+              // console.log(response);
+              // console.log(response.exists);
+              // console.log(response.data());
+              // console.log(e.data());
+              if (response.exists) {
                 let d = {
                   id: e.id,
                   name:
@@ -40,11 +45,10 @@ export default function UsersRequests() {
                 arr.push(d);
                 l = [...arr];
                 setUsers(l);
-              });
-          }
+              }
+            });
         });
-      }
-    });
+      });
   }, []);
   function acceptUserRequest(id) {
     db.collection("users-basics").doc(id).update({
@@ -52,8 +56,12 @@ export default function UsersRequests() {
     });
   }
   function cancelUserRequest(id) {
-    db.collection("users-basics").doc(id).delete();
-    db.collection("users-details").doc(id).delete();
+    db.collection("users-basics")
+      .doc(id)
+      .delete()
+      .then(() => {
+        db.collection("users-details").doc(id).delete();
+      });
   }
   const fields = [
     "name",
@@ -83,7 +91,6 @@ export default function UsersRequests() {
                         <CButton
                           color="primary"
                           variant="outline"
-                          square
                           size="sm"
                           onClick={() => acceptUserRequest(item.id)}
                         >
@@ -98,7 +105,6 @@ export default function UsersRequests() {
                         <CButton
                           color="primary"
                           variant="outline"
-                          square
                           size="sm"
                           onClick={() => cancelUserRequest(item.id)}
                         >
