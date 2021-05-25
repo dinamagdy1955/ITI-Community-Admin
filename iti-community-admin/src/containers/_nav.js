@@ -27,6 +27,11 @@ const _nav = [
     _children: [
       {
         _tag: "CSidebarNavItem",
+        name: "All Users",
+        to: "/users/show",
+      },
+      {
+        _tag: "CSidebarNavItem",
         name: "Unaccepted Users",
         to: "/users/requests",
       },
@@ -89,11 +94,6 @@ const _nav = [
         name: "Add Track",
         to: "/tracks/Add-Track",
       },
-      // {
-      //   _tag: "CSidebarNavItem",
-      //   name: "Edit Track",
-      //   to: "/tracks/Edit-Track",
-      // },
     ],
   },
   {

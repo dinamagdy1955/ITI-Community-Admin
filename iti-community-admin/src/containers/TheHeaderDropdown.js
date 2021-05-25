@@ -28,7 +28,7 @@ const TheHeaderDropdown = () => {
         </div>
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
-        <CDropdownItem header tag="div" color="light" className="text-center">
+        {/* <CDropdownItem header tag="div" color="light" className="text-center">
           <strong>Account</strong>
         </CDropdownItem>
         <CDropdownItem>
@@ -44,8 +44,8 @@ const TheHeaderDropdown = () => {
           <CBadge color="success" className="mfs-auto">
             42
           </CBadge>
-        </CDropdownItem>
-        <CDropdownItem>
+        </CDropdownItem> */}
+        {/* <CDropdownItem>
           <CIcon name="cil-task" className="mfe-2" />
           Tasks
           <CBadge color="danger" className="mfs-auto">
@@ -83,12 +83,12 @@ const TheHeaderDropdown = () => {
           <CBadge color="primary" className="mfs-auto">
             42
           </CBadge>
-        </CDropdownItem>
+        </CDropdownItem> */}
         <CDropdownItem divider />
-        <CDropdownItem>
+        {/* <CDropdownItem>
           <CIcon name="cil-lock-locked" className="mfe-2" />
           Lock Account
-        </CDropdownItem>
+        </CDropdownItem> */}
         <CDropdownItem onClick={() => Logout()}>
           <CIcon name="cil-lock-locked" className="mfe-2" />
           Logout
