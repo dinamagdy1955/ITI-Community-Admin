@@ -162,7 +162,6 @@ const BasicForms = () => {
           });
           prog.then((e) => {
             e.ref.getDownloadURL().then((url) => {
-              console.log(url);
               setJob({
                 ...job,
                 companyLogoAvatar: url,

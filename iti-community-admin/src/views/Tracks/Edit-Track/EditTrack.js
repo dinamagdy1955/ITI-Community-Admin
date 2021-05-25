@@ -42,7 +42,6 @@ export default function EditTrack() {
   }, []);
 
   const handleForm = (e) => {
-    console.log(e.target.value, e.target.name);
     switch (e.target.name) {
       case "name":
         setTrack({

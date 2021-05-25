@@ -17,7 +17,6 @@ export default function AddBranch() {
   });
 
   const handleForm = (e) => {
-    console.log(e.target.value, e.target.name);
     switch (e.target.name) {
       case "name":
         setBranch({
@@ -63,7 +62,6 @@ export default function AddBranch() {
   };
 
   const addNew = () => {
-    console.log(Branch);
     return db.collection("Branches").add(Branch);
   };
 

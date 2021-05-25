@@ -21,7 +21,6 @@ export default function ShowTracks() {
     db.collection("Tracks").onSnapshot((res) => {
       arr = [];
       res.forEach((e) => {
-        console.log(e.data());
         let d = {
           id: e.id,
           name: e.data().name,

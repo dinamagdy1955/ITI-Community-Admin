@@ -22,7 +22,6 @@ export default function ShowAll() {
     db.collection("Branches").onSnapshot((res) => {
       arr = [];
       res.forEach((e) => {
-        console.log(e.data());
         let d = {
           id: e.id,
           name: e.data().name,
@@ -34,22 +33,13 @@ export default function ShowAll() {
         };
         arr.push(d);
         l = [...arr];
-        console.log(l);
         setBranch(l);
-        console.log(branch);
       });
     });
   }, []);
 
   function Delete(id) {
-    /*console.log('deleted')*/
-    var x = prompt(
-      `are you sure you want to delete the Branch with id : ${id}`
-    );
-    console.log(x);
-    if (x != null) {
-      db.collection("Branches").doc(id).delete();
-    }
+    db.collection("Branches").doc(id).delete();
   }
 
   const fields = [

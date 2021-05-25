@@ -17,7 +17,6 @@ export default function AddTrack() {
   });
 
   const handleForm = (e) => {
-    console.log(e.target.value, e.target.name);
     switch (e.target.name) {
       case "name":
         setTrack({
@@ -62,7 +61,6 @@ export default function AddTrack() {
     }
   };
   const addNew = () => {
-    console.log(Track);
     return db.collection("Tracks").add(Track);
   };
 

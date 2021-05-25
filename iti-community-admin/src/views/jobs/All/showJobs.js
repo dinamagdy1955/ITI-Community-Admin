@@ -67,9 +67,7 @@ const Showjobs = () => {
           d.closingDate = dayClosing + "-" + monthClosing + "-" + yearClosing;
         }
         arr.push(d);
-        console.log(arr);
         l = [...arr];
-        console.log(l);
         setJobs(l);
       });
     });
