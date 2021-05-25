@@ -52,7 +52,6 @@ const _nav = [
         name: "New Group",
         to: "/Groups/Add",
       },
-
     ],
   },
   //////////////////////////////////////
@@ -69,9 +68,8 @@ const _nav = [
       {
         _tag: "CSidebarNavItem",
         name: "Add Branch",
-        to: "/branches/Add-Branche",
+        to: "/branches/Add-Branch",
       },
-    
     ],
   },
   //////////////////////////////

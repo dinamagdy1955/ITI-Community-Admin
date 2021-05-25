@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router";
+import React, { useState, useEffect } from "react";
+import { useHistory, useParams } from "react-router";
 import {
   CButton,
   CCard,
@@ -16,13 +16,16 @@ import {
   CTextarea,
   CSelect,
   CSwitch,
+  CImg,
 } from "@coreui/react";
 import { db } from "src/firebase";
 import { upload } from "src/firebase";
 
-const BasicForms = () => {
+const EditJob = () => {
   const history = useHistory();
   if (localStorage.getItem("adminToken") == undefined) history.push("/login");
+  let sub1;
+  const { id } = useParams();
   const [notspec, setNotSpec] = useState(false);
   const [progress, setprogress] = useState(100);
   const [job, setJob] = useState({
@@ -58,6 +61,59 @@ const BasicForms = () => {
     postedDate: new Date(),
     closingDate: null,
   });
+
+  useEffect(() => {
+    var arr = [];
+    var l = [];
+    sub1 = db
+      .collection("jobs")
+      .doc(id)
+      .onSnapshot((res) => {
+        arr = [];
+        l = [];
+        if (res.exists) {
+          const data = {
+            company: {
+              en: res.data().company.en,
+              ar: res.data().company.ar,
+            },
+            position: {
+              en: res.data().position.en,
+              ar: res.data().position.ar,
+            },
+            seniorityLevel: {
+              en: res.data().seniorityLevel.en,
+              ar: res.data().seniorityLevel.ar,
+            },
+            description: {
+              en: res.data().description.en,
+              ar: res.data().description.en,
+            },
+            location: {
+              en: res.data().location.en,
+              ar: res.data().location.ar,
+            },
+            employmentType: {
+              en: res.data().employmentType.en,
+              ar: res.data().employmentType.ar,
+            },
+            worksFrom: {
+              en: res.data().worksFrom.en,
+              ar: res.data().worksFrom.ar,
+            },
+            companyLogoAvatar: res.data().companyLogoAvatar,
+            postedDate: res.data().postedDate,
+            closingDate: res.data().closingDate,
+          };
+          setJob(data);
+        } else {
+          console.log("Not Founded");
+        }
+      });
+    return () => {
+      sub1();
+    };
+  }, []);
 
   const handleForm = async (e) => {
     switch (e.target.name) {
@@ -191,8 +247,12 @@ const BasicForms = () => {
         break;
     }
   };
-  function AddJob() {
-    db.collection("jobs").doc().set(job);
+  function EditJob() {
+    db.collection("jobs").doc(id).set(job);
+    history.push("/jobs/showjobs");
+  }
+  function DeleteJob() {
+    db.collection("jobs").doc(id).delete();
     history.push("/jobs/showjobs");
   }
   return (
@@ -202,9 +262,9 @@ const BasicForms = () => {
           <CCard>
             <CForm action="" method="post" className="form-horizontal">
               <CCardHeader className="d-flex">
-                <span className="w-75">Add new Job</span>
+                <span className="w-75">Edit Job</span>
                 <span className="w-50" style={{ textAlign: "right" }}>
-                  إضافة وظيفة جديدة
+                  تعديل وظيفة
                 </span>
               </CCardHeader>
               <CFormGroup>
@@ -217,6 +277,7 @@ const BasicForms = () => {
                           name="companyEn"
                           placeholder="Enter Company Name"
                           onChange={handleForm}
+                          value={job.company.en}
                           required
                         />
                       </CFormGroup>
@@ -226,6 +287,7 @@ const BasicForms = () => {
                           name="positionEn"
                           placeholder="Enter the position of the annonounced job"
                           onChange={handleForm}
+                          value={job.position.en}
                           required
                         />
                       </CFormGroup>
@@ -235,6 +297,7 @@ const BasicForms = () => {
                           name="levelEn"
                           placeholder="Enter the seniority level of job"
                           onChange={handleForm}
+                          value={job.seniorityLevel.en}
                           required
                         />
                       </CFormGroup>
@@ -245,6 +308,7 @@ const BasicForms = () => {
                           placeholder="Enter the description of job requirment"
                           rows="5"
                           onChange={handleForm}
+                          value={job.description.en}
                           required
                         ></CTextarea>
                       </CFormGroup>
@@ -254,6 +318,7 @@ const BasicForms = () => {
                           name="locationEn"
                           placeholder="Enter the location of company"
                           onChange={handleForm}
+                          value={job.location.en}
                           required
                         />
                       </CFormGroup>
@@ -267,6 +332,7 @@ const BasicForms = () => {
                           placeholder="ادخل اسم الشركة"
                           onChange={handleForm}
                           style={{ textAlign: "right" }}
+                          value={job.company.ar}
                           required
                         />
                       </CFormGroup>
@@ -277,6 +343,7 @@ const BasicForms = () => {
                           placeholder="ادخل المركز الوظيفي للوظيفة المتاحة"
                           onChange={handleForm}
                           style={{ textAlign: "right" }}
+                          value={job.position.ar}
                           required
                         />
                       </CFormGroup>
@@ -287,6 +354,7 @@ const BasicForms = () => {
                           placeholder="ادخل المستوى الوظيفي للوظيفة المتاحة"
                           onChange={handleForm}
                           style={{ textAlign: "right" }}
+                          value={job.seniorityLevel.ar}
                           required
                         />
                       </CFormGroup>
@@ -298,6 +366,7 @@ const BasicForms = () => {
                           rows="5"
                           onChange={handleForm}
                           style={{ textAlign: "right" }}
+                          value={job.description.ar}
                           required
                         ></CTextarea>
                       </CFormGroup>
@@ -308,6 +377,7 @@ const BasicForms = () => {
                           placeholder="ادخل موقع مقر الشركة"
                           onChange={handleForm}
                           style={{ textAlign: "right" }}
+                          value={job.location.ar}
                           required
                         />
                       </CFormGroup>
@@ -323,6 +393,7 @@ const BasicForms = () => {
                           custom
                           size="md"
                           name="employmentType"
+                          selected={job.employmentType}
                           onChange={handleForm}
                         >
                           <option value="fulltime">FullTime</option>
@@ -339,6 +410,7 @@ const BasicForms = () => {
                           size="md"
                           name="worksFrom"
                           onChange={handleForm}
+                          selected={job.worksFrom}
                         >
                           <option value="onsite">On site</option>
                           <option value="remotly">Remotly</option>
@@ -350,11 +422,26 @@ const BasicForms = () => {
                     <CCol>
                       <CFormGroup>
                         <CLabel>Company Logo Avatar</CLabel>
-                        <CInputFile
-                          id="img"
-                          name="companyLogoAvatar"
-                          onChange={handleForm}
-                        />
+                        <div className="d-flex">
+                          <CInputFile
+                            id="img"
+                            name="companyLogoAvatar"
+                            onChange={handleForm}
+                          />
+                          {job.companyLogoAvatar === "" ? (
+                            <CImg
+                              src="http://via.placeholder.com/400x400/"
+                              width="150"
+                              className="mt-1 mb-4"
+                            />
+                          ) : (
+                            <CImg
+                              src={job.companyLogoAvatar}
+                              width="150"
+                              className="mt-1 mb-4"
+                            />
+                          )}
+                        </div>
                       </CFormGroup>
                     </CCol>
                     <CCol xs="2"></CCol>
@@ -366,7 +453,9 @@ const BasicForms = () => {
                             type="date"
                             name="closingDate"
                             placeholder="date"
-                            disabled={notspec}
+                            value={
+                              job.closingDate == null ? "" : job.closingDate
+                            }
                             onChange={handleForm}
                           />
                         </CCol>
@@ -376,6 +465,7 @@ const BasicForms = () => {
                             className="mr-2 mt-2"
                             color="primary"
                             onChange={handleForm}
+                            selected={job.closingDate == null ? true : false}
                           />
                           <CLabel>Not specified yet</CLabel>
                         </CCol>
@@ -391,17 +481,18 @@ const BasicForms = () => {
                     size="sm"
                     disabled={progress.pro < 100 ? true : false}
                     className="w-25 mx-1"
-                    onClick={AddJob}
+                    onClick={EditJob}
                   >
-                    {progress.pro < 100 ? progress.msg : "Add"}
+                    {progress.pro < 100 ? progress.msg : "Edit"}
                   </CButton>
                   <CButton
-                    type="reset"
+                    type="button"
                     size="sm"
                     color="danger"
                     className="w-25 mx-1"
+                    onClick={DeleteJob}
                   >
-                    Reset
+                    Delete
                   </CButton>
                 </CCardFooter>
               </CFormGroup>
@@ -412,4 +503,4 @@ const BasicForms = () => {
     </>
   );
 };
-export default BasicForms;
+export default EditJob;

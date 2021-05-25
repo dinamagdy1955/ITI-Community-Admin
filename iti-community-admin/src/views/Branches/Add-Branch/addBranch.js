@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Card } from "react-bootstrap";
 import { db } from "src/firebase";
 import { useHistory } from "react-router";
 export default function AddBranch() {
@@ -67,109 +67,90 @@ export default function AddBranch() {
     return db.collection("Branches").add(Branch);
   };
 
-
   return (
     <>
-      <h1>Branches</h1>
-      <h4>Add New One</h4>
-      <br></br>
-      <Form>
-        <Form.Group controlId="formGridBName">
-          <Form.Label>Name</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter Branch Name"
-            name="name"
-            onChange={handleForm}
-            value={Branch.name}
-          />
-        </Form.Group>
+      <Card style={{ width: "75%" }}>
+        <Card.Header>Add new Track</Card.Header>
+        <div className="m-1" style={{ width: "75%" }}>
+          <Form>
+            <Form.Group controlId="formGridBName">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter Branch Name"
+                name="name"
+                onChange={handleForm}
+                value={Branch.name}
+              />
+            </Form.Group>
 
-        <Form.Group controlId="formGridBAddress">
-          <Form.Label>Address</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter Branch Adress"
-            name="location"
-            onChange={handleForm}
-            value={Branch.location}
-          />
-        </Form.Group>
+            <Form.Group controlId="formGridBAddress">
+              <Form.Label>Address</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter Branch Adress"
+                name="location"
+                onChange={handleForm}
+                value={Branch.location}
+              />
+            </Form.Group>
 
-        <Form.Group controlId="formGridBmanager">
-          <Form.Label>Manager</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter Branch manager"
-            name="manager"
-            onChange={handleForm}
-            value={Branch.manager}
-          />
-        </Form.Group>
+            <Form.Group controlId="formGridBmanager">
+              <Form.Label>Manager</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter Branch manager"
+                name="manager"
+                onChange={handleForm}
+                value={Branch.manager}
+              />
+            </Form.Group>
 
+            <Form.Row>
+              <Form.Group controlId="formGridBTN" style={{ margin: "5px" }}>
+                <Form.Label>NO.Tracks</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="NO.Tracks"
+                  name="no_tracks"
+                  onChange={handleForm}
+                  value={Branch.no_tracks}
+                />
+              </Form.Group>
 
-        <Form.Row>
-          <Form.Group controlId="formGridBTN" style={{ margin: "5px" }}>
-            <Form.Label>NO.Tracks</Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="NO.Tracks"
-              name="no_tracks"
-              onChange={handleForm}
-              value={Branch.no_tracks}
-            />
-          </Form.Group>
+              <Form.Group controlId="formGridBSN" style={{ margin: "5px" }}>
+                <Form.Label>NO.Students</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="NO.Students"
+                  name="no_students"
+                  onChange={handleForm}
+                  value={Branch.no_students}
+                />
+              </Form.Group>
 
-          <Form.Group controlId="formGridBSN" style={{ margin: "5px" }}>
-            <Form.Label>NO.Students</Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="NO.Students"
-              name="no_students"
-              onChange={handleForm}
-              value={Branch.no_students}
-            />
-          </Form.Group>
-
-          <Form.Group controlId="formGridBIN" style={{ margin: "5px" }}>
-            <Form.Label>NO.Instructors</Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="Instructors"
-              name="no_instructors"
-              onChange={handleForm}
-              value={Branch.no_instructors}
-            />
-          </Form.Group>
-          {/* <Form.Group controlId="formGridCity">
-      <Form.Label>City</Form.Label>
-      <Form.Control />
-    </Form.Group>
-
-    <Form.Group controlId="formGridState">
-      <Form.Label>State</Form.Label>
-      <Form.Control as="select" defaultValue="Choose...">
-        <option>Choose...</option>
-        <option>...</option>
-      </Form.Control>
-    </Form.Group>
-
-    <Form.Group controlId="formGridZip">
-      <Form.Label>Zip</Form.Label>
-      <Form.Control />
-    </Form.Group> */}
-
-        </Form.Row>
-
-        <Button
-          variant="primary"
-          type="button"
-          style={{ margin: "10px" }}
-          onClick={addNew}
-        >
-          Add
-        </Button>
-      </Form>
+              <Form.Group controlId="formGridBIN" style={{ margin: "5px" }}>
+                <Form.Label>NO.Instructors</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="Instructors"
+                  name="no_instructors"
+                  onChange={handleForm}
+                  value={Branch.no_instructors}
+                />
+              </Form.Group>
+            </Form.Row>
+            <Button
+              variant="success"
+              type="button"
+              onClick={addNew}
+              className="w-25 mx-2 mb-2"
+            >
+              Add
+            </Button>
+          </Form>
+        </div>
+      </Card>
     </>
   );
 }
