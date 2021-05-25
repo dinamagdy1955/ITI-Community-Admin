@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { db } from "src/firebase";
 import { CCard, CCardBody, CCardHeader, CCol, CRow } from "@coreui/react";
 import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
 const Dashboard = () => {
   const history = useHistory();
   if (localStorage.getItem("adminToken") == undefined) history.push("/login");
@@ -41,47 +42,67 @@ const Dashboard = () => {
           </CCard>
         </CCol>
         <CCol xs="12" sm="6" md="4">
-          <CCard
-            color="gradient-secondary"
-            className="text-black text-center fs-2"
+          <Link
+            to="/groups/All"
+            style={{ textDecorationLine: "none", color: "black" }}
           >
-            <CCardHeader className="font-weight-bolder">
-              <h2>Groups</h2>
-            </CCardHeader>
-            <CCardBody className="fs-6">
-              <h3>{groups}</h3>
-            </CCardBody>
-          </CCard>
+            <CCard
+              color="gradient-secondary"
+              className="text-black text-center fs-2"
+            >
+              <CCardHeader className="font-weight-bolder">
+                <h2>Groups</h2>
+              </CCardHeader>
+              <CCardBody className="fs-6">
+                <h3>{groups}</h3>
+              </CCardBody>
+            </CCard>
+          </Link>
         </CCol>
         <CCol xs="12" sm="6" md="4">
-          <CCard color="gradient-warning" className="text-black text-center">
-            <CCardHeader className="font-weight-bolder">
-              <h2>Tracks</h2>
-            </CCardHeader>
-            <CCardBody className="fs-6">
-              <h3>{tracks}</h3>
-            </CCardBody>
-          </CCard>
+          <Link
+            to="/tracks/Show-Tracks"
+            style={{ textDecorationLine: "none", color: "black" }}
+          >
+            <CCard color="gradient-warning" className="text-black text-center">
+              <CCardHeader className="font-weight-bolder">
+                <h2>Tracks</h2>
+              </CCardHeader>
+              <CCardBody className="fs-6">
+                <h3>{tracks}</h3>
+              </CCardBody>
+            </CCard>
+          </Link>
         </CCol>
         <CCol xs="12" sm="6" md="4">
-          <CCard color="gradient-danger" className="text-white text-center">
-            <CCardHeader className="font-weight-bolder">
-              <h2>Branches</h2>
-            </CCardHeader>
-            <CCardBody className="fs-6">
-              <h3>{branches}</h3>
-            </CCardBody>
-          </CCard>
+          <Link
+            to="/branches/Show-All"
+            style={{ textDecorationLine: "none", color: "white" }}
+          >
+            <CCard color="gradient-danger" className="text-white text-center">
+              <CCardHeader className="font-weight-bolder">
+                <h2>Branches</h2>
+              </CCardHeader>
+              <CCardBody className="fs-6">
+                <h3>{branches}</h3>
+              </CCardBody>
+            </CCard>
+          </Link>
         </CCol>
         <CCol xs="12" sm="6" md="4">
-          <CCard color="gradient-primary" className="text-white text-center">
-            <CCardHeader className="font-weight-bolder">
-              <h2>Jobs</h2>
-            </CCardHeader>
-            <CCardBody className="fs-6">
-              <h3>{jobs}</h3>
-            </CCardBody>
-          </CCard>
+          <Link
+            to="/jobs/showjobs"
+            style={{ textDecorationLine: "none", color: "white" }}
+          >
+            <CCard color="gradient-primary" className="text-white text-center">
+              <CCardHeader className="font-weight-bolder">
+                <h2>Jobs</h2>
+              </CCardHeader>
+              <CCardBody className="fs-6">
+                <h3>{jobs}</h3>
+              </CCardBody>
+            </CCard>
+          </Link>
         </CCol>
       </CRow>
     </>

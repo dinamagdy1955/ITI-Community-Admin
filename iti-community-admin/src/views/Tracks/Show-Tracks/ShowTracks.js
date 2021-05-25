@@ -32,9 +32,7 @@ export default function ShowTracks() {
         };
         arr.push(d);
         l = [...arr];
-        console.log(l);
         setTracks(l);
-        console.log(tracks);
       });
     });
   }, []);
@@ -46,12 +44,7 @@ export default function ShowTracks() {
    
   }*/
   function Delete(id) {
-    /* console.log('deleted')*/
-    var x = prompt(`are you sure you want to delete the track with id : ${id}`);
-    console.log(x);
-    if (x != null) {
-      return db.collection("Tracks").doc(id).delete();
-    }
+    db.collection("Tracks").doc(id).delete();
   }
 
   const fields = [
@@ -68,7 +61,7 @@ export default function ShowTracks() {
       <CRow>
         <CCol>
           <CCard>
-            <CCardHeader>Branches</CCardHeader>
+            <CCardHeader>Tracks</CCardHeader>
             <CCardBody>
               <CDataTable
                 items={tracks}
@@ -89,7 +82,7 @@ export default function ShowTracks() {
                       >
                         Delete
                       </Button>{" "}
-                      <Link to= {`/tracks/${item.id}`}>
+                      <Link to={`/tracks/${item.id}`}>
                         <Button variant="success">Edit</Button>
                       </Link>
                     </td>

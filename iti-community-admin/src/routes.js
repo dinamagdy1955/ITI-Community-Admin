@@ -33,7 +33,7 @@ const EditTrack = React.lazy(() =>
 const AddTrack = React.lazy(() => import("./views/Tracks/Add-Track/AddTrack"));
 const ShowJobs = React.lazy(() => import("./views/jobs/All/showJobs"));
 const AddJob = React.lazy(() => import("./views/jobs/Add/addJob"));
-
+const EditJob = React.lazy(() => import("./views/jobs/Edit/EditJob"));
 const routes = [
   { path: "/", exact: true, name: "Home" },
   { path: "/dashboard", name: "Dashboard", component: Dashboard },
@@ -48,25 +48,26 @@ const routes = [
   { path: "/groups/Add", name: "Add Group", component: addGroups },
   { path: "/groups/:id", name: "Edit Group", component: editGroups },
 
-  { path: "/branches/Show-All", name: "Show All", component: ShowAll },
-  { path: "/branches/Add-Branche", name: "Add Branch", component: AddBranch },
+  { path: "/branches/Show-All", name: "Branches", component: ShowAll },
+  { path: "/branches/Add-Branch", name: "Add Branch", component: AddBranch },
   {
     path: "/branches/:id",
     name: "Edit-Branch",
     component: EditBranch,
   },
 
-  { path: "/tracks/Show-Tracks", name: "Show Tracks", component: ShowTracks },
+  { path: "/tracks/Show-Tracks", name: "Tracks", component: ShowTracks },
   { path: "/tracks/Add-Track", name: "Add Track", component: AddTrack },
   { path: "/tracks/:id", name: "Edit Track", component: EditTrack },
 
   {
     path: "/jobs/showjobs",
     exact: true,
-    name: "Show Jobs",
+    name: "Jobs",
     component: ShowJobs,
   },
   { path: "/jobs/addjob", exact: true, name: "Add Jobs", component: AddJob },
+  { path: "/jobs/:id", exact: true, name: "Edit Job", component: EditJob },
 ];
 
 export default routes;
