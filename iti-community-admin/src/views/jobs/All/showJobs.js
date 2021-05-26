@@ -31,7 +31,6 @@ const Showjobs = () => {
         var monthPosted = new Date(e.data().postedDate * 1000).getMonth() + 1;
         var yearPosted =
           new Date(e.data().postedDate * 1000).getFullYear() - 1969;
-        console.log(e.id);
         let d = {
           id: e.id,
           company_ar: e.data().company.ar,
@@ -68,9 +67,7 @@ const Showjobs = () => {
           d.closingDate = dayClosing + "-" + monthClosing + "-" + yearClosing;
         }
         arr.push(d);
-        console.log(arr);
         l = [...arr];
-        console.log(l);
         setJobs(l);
       });
     });
@@ -91,7 +88,6 @@ const Showjobs = () => {
   };
 
   function DeleteJob(jobId) {
-    console.log(jobId);
     db.collection("jobs").doc(jobId).delete();
   }
 

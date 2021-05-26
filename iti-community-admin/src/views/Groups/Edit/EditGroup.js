@@ -26,8 +26,8 @@ const EditGroup = () => {
     Img: "",
     Specialty: "",
   });
-  const [progress, setprogress] = useState(100)
-  const [track, setTrack] = useState([])
+  const [progress, setprogress] = useState(100);
+  const [track, setTrack] = useState([]);
 
   useEffect(() => {
     const ref = getGroupData().doc(id).get();
@@ -38,22 +38,21 @@ const EditGroup = () => {
           Name: data.Name,
           Description: data.Description,
           Img: data.Img,
-          Specialty: data.Specialty
+          Specialty: data.Specialty,
         });
       } else {
-        console.log("Not Founded");
       }
     });
-    var arr = []
-    getTracks().onSnapshot(res => {
-      res.forEach(e => {
+    var arr = [];
+    getTracks().onSnapshot((res) => {
+      res.forEach((e) => {
         arr.push({
           id: e.id,
-          ...(e.data())
-        })
-      })
-      setTrack(arr)
-    })
+          ...e.data(),
+        });
+      });
+      setTrack(arr);
+    });
   }, []);
 
   const handleForm = async (e) => {
@@ -81,30 +80,30 @@ const EditGroup = () => {
         if (e.target.files.length > 0) {
           setprogress({
             pro: 0,
-            msg: 'Wait To Upload Your Image'
-          })
-          const file = e.target.files[0]
-          const storageRef = await upload.ref(`GroupImg/${file.name}`)
-          const prog = storageRef.put(file)
-          const pro = ((await prog).bytesTransferred / (await prog).totalBytes) * 100
+            msg: "Wait To Upload Your Image",
+          });
+          const file = e.target.files[0];
+          const storageRef = await upload.ref(`GroupImg/${file.name}`);
+          const prog = storageRef.put(file);
+          const pro =
+            ((await prog).bytesTransferred / (await prog).totalBytes) * 100;
           setprogress({
             pro: pro,
-            msg: 'Wait To Upload Your Image'
-          })
-          prog.then(e => {
+            msg: "Wait To Upload Your Image",
+          });
+          prog.then((e) => {
             e.ref.getDownloadURL().then((url) => {
-              console.log(url)
               setGroup({
                 ...Group,
                 Img: url,
-              })
-            })
-          })
+              });
+            });
+          });
         } else {
           setGroup({
             ...Group,
             Img: Group.Img,
-          })
+          });
         }
         break;
       default:
@@ -120,7 +119,7 @@ const EditGroup = () => {
         Name: Group.Name,
         Description: Group.Description,
         Img: Group.Img,
-        Specialty: Group.Specialty
+        Specialty: Group.Specialty,
       })
       .then(
         (document.getElementById("name").value = ""),
@@ -158,17 +157,33 @@ const EditGroup = () => {
               onChange={handleForm}
               value={Group.Description}
             />
-            <CLabel htmlFor="track" className="pt-2">Group Specialty :</CLabel>
-            <CSelect custom name="Specialty" id="track" onChange={handleForm} value={Group.Specialty}>
+            <CLabel htmlFor="track" className="pt-2">
+              Group Specialty :
+            </CLabel>
+            <CSelect
+              custom
+              name="Specialty"
+              id="track"
+              onChange={handleForm}
+              value={Group.Specialty}
+            >
               <option value="No Track">Choose...</option>
-              {track.map((t) => <option key={t.id} value={t.name}>{t.name}</option>)}
+              {track.map((t) => (
+                <option key={t.id} value={t.name}>
+                  {t.name}
+                </option>
+              ))}
             </CSelect>
 
             <img src={Group.Img} width="400" className="py-4 w-100" />
             <CFormGroup row>
-              <CLabel col md="3" htmlFor="file-input">Change Group Image</CLabel>
+              <CLabel col md="3" htmlFor="file-input">
+                Change Group Image
+              </CLabel>
               <CCol xs="12" md="9">
+
                 <CInputFile id="file-input" name="file-input" id="img" name="URL" onChange={handleForm} className="pt-3" />
+
               </CCol>
             </CFormGroup>
             <CCardFooter className="mt-3 rounded">
@@ -180,7 +195,7 @@ const EditGroup = () => {
                   size="sm"
                   className="w-25 mx-1"
                 >
-                  {progress.pro < 100 ? progress.msg : 'Edit'}
+                  {progress.pro < 100 ? progress.msg : "Edit"}
                 </CButton>
                 <CButton
                   type="reset"

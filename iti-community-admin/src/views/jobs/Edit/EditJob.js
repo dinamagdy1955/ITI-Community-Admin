@@ -107,7 +107,6 @@ const EditJob = () => {
           };
           setJob(data);
         } else {
-          console.log("Not Founded");
         }
       });
     return () => {
@@ -218,7 +217,6 @@ const EditJob = () => {
           });
           prog.then((e) => {
             e.ref.getDownloadURL().then((url) => {
-              console.log(url);
               setJob({
                 ...job,
                 companyLogoAvatar: url,

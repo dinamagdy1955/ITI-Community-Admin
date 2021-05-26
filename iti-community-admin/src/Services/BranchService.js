@@ -13,16 +13,12 @@ export default function BranchServices() {
         .then((res) => {
           var arr = [];
           res.forEach((e) => {
-            console.log(e);
             arr.push({
               id: e.id,
               data: e.data(),
             });
           });
           setBranch(arr);
-          for (let i = 0; i < branch.length; i++) {
-            console.log(branch[i].data);
-          }
         });
     };
   }, []);

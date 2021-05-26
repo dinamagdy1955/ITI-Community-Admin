@@ -15,31 +15,32 @@ export default function DeleteReportedUsers() {
   if (localStorage.getItem("adminToken") == undefined) history.push("/login");
   const [users, setUsers] = React.useState([]);
   useEffect(() => {
-    db.collection("users-basics").onSnapshot((res) => {
-      var arr = [];
-      var temp = [];
-      setUsers([]);
-      res.forEach((e) => {
-        if (e.data().isAccepted && e.data().isReported && !e.data().isRemoved) {
+    db.collection("users-basics")
+      .where("isAccepted", "==", true)
+      .where("isReported", "==", true)
+      .where("isRemoved", "==", false)
+      .onSnapshot((res) => {
+        var arr = [];
+        var temp = [];
+        setUsers([]);
+        res.forEach((e) => {
           db.collection("users-details")
             .doc(e.id)
             .onSnapshot((response) => {
-              console.log(response.data());
               let d = {
                 id: e.id,
                 name:
                   response.data().firstName + " " + response.data().lastName,
                 email: e.data().email,
-                isReported: e.data().isReported,
+                isReported: e.data().isReported.toString(),
                 reports: e.data().reports,
               };
               arr.push(d);
               temp = [...arr];
               setUsers(temp);
             });
-        }
+        });
       });
-    });
   }, []);
   function removeReportedUsers(id) {
     db.collection("users-basics").doc(id).update({
@@ -66,7 +67,6 @@ export default function DeleteReportedUsers() {
                         <CButton
                           color="primary"
                           variant="outline"
-                          square
                           size="sm"
                           onClick={() => removeReportedUsers(item.id)}
                         >

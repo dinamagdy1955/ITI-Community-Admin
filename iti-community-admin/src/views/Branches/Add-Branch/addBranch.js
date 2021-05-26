@@ -17,7 +17,6 @@ export default function AddBranch() {
   });
 
   const handleForm = (e) => {
-    console.log(e.target.value, e.target.name);
     switch (e.target.name) {
       case "name":
         setBranch({
@@ -63,15 +62,14 @@ export default function AddBranch() {
   };
 
   const addNew = () => {
-    console.log(Branch);
     return db.collection("Branches").add(Branch);
   };
 
   return (
     <>
       <Card style={{ width: "75%" }}>
-        <Card.Header>Add new Track</Card.Header>
-        <div className="m-1" style={{ width: "75%" }}>
+        <Card.Header>Add new Branch</Card.Header>
+        <div className="m-4" style={{ width: "75%" }}>
           <Form>
             <Form.Group controlId="formGridBName">
               <Form.Label>Name</Form.Label>
@@ -107,7 +105,11 @@ export default function AddBranch() {
             </Form.Group>
 
             <Form.Row>
-              <Form.Group controlId="formGridBTN" style={{ margin: "5px" }}>
+              <Form.Group
+                className="col"
+                controlId="formGridBTN"
+                style={{ margin: "5px" }}
+              >
                 <Form.Label>NO.Tracks</Form.Label>
                 <Form.Control
                   type="number"
@@ -118,7 +120,11 @@ export default function AddBranch() {
                 />
               </Form.Group>
 
-              <Form.Group controlId="formGridBSN" style={{ margin: "5px" }}>
+              <Form.Group
+                className="col"
+                controlId="formGridBSN"
+                style={{ margin: "5px" }}
+              >
                 <Form.Label>NO.Students</Form.Label>
                 <Form.Control
                   type="number"
@@ -129,7 +135,11 @@ export default function AddBranch() {
                 />
               </Form.Group>
 
-              <Form.Group controlId="formGridBIN" style={{ margin: "5px" }}>
+              <Form.Group
+                className="col"
+                controlId="formGridBIN"
+                style={{ margin: "5px" }}
+              >
                 <Form.Label>NO.Instructors</Form.Label>
                 <Form.Control
                   type="number"
@@ -144,7 +154,7 @@ export default function AddBranch() {
               variant="success"
               type="button"
               onClick={addNew}
-              className="w-25 mx-2 mb-2"
+              className="w-25 mx-2 mb-2 mt-2"
             >
               Add
             </Button>

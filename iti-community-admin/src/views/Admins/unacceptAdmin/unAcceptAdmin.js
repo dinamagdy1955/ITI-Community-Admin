@@ -34,7 +34,6 @@ export default function UnAcceptAdmin() {
           arr.push(d);
           temp = [...arr];
           setAdmins(temp);
-          console.log(admins);
         }
       });
     });

@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
-  CBadge,
   CDropdown,
   CDropdownItem,
   CDropdownMenu,
@@ -9,26 +8,38 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { useHistory } from "react-router";
+import { auth } from "src/firebase";
+import { userDataContext } from "src/userDataContext";
 const TheHeaderDropdown = () => {
+  const { userData, setUserData } = useContext(userDataContext);
   const history = useHistory();
   function Logout() {
-    localStorage.removeItem("adminToken");
-    localStorage.removeItem("adminUid");
-    history.push("/login");
+    auth.signOut().then(() => {
+      localStorage.removeItem("adminToken");
+      history.push("/login");
+    });
   }
   return (
     <CDropdown inNav className="c-header-nav-items mx-2" direction="down">
       <CDropdownToggle className="c-header-nav-link" caret={false}>
         <div className="c-avatar">
-          <CImg
-            src={"avatars/6.jpg"}
-            className="c-avatar-img"
-            alt="admin@bootstrapmaster.com"
-          />
+          {userData == null ? (
+            <CImg
+              src="https://firebasestorage.googleapis.com/v0/b/iti-community.appspot.com/o/nav-img.png?alt=media&token=c9c9cc3e-e650-4b5d-a56a-e7db7ba69c36"
+              className="c-avatar-img"
+              alt="user"
+            />
+          ) : (
+            <CImg
+              src={userData.avatar}
+              className="c-avatar-img"
+              alt={userData.email}
+            />
+          )}
         </div>
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
-        <CDropdownItem header tag="div" color="light" className="text-center">
+        {/* <CDropdownItem header tag="div" color="light" className="text-center">
           <strong>Account</strong>
         </CDropdownItem>
         <CDropdownItem>
@@ -44,8 +55,8 @@ const TheHeaderDropdown = () => {
           <CBadge color="success" className="mfs-auto">
             42
           </CBadge>
-        </CDropdownItem>
-        <CDropdownItem>
+        </CDropdownItem> */}
+        {/* <CDropdownItem>
           <CIcon name="cil-task" className="mfe-2" />
           Tasks
           <CBadge color="danger" className="mfs-auto">
@@ -83,12 +94,12 @@ const TheHeaderDropdown = () => {
           <CBadge color="primary" className="mfs-auto">
             42
           </CBadge>
-        </CDropdownItem>
+        </CDropdownItem> */}
         <CDropdownItem divider />
-        <CDropdownItem>
+        {/* <CDropdownItem>
           <CIcon name="cil-lock-locked" className="mfe-2" />
           Lock Account
-        </CDropdownItem>
+        </CDropdownItem> */}
         <CDropdownItem onClick={() => Logout()}>
           <CIcon name="cil-lock-locked" className="mfe-2" />
           Logout

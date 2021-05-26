@@ -21,7 +21,6 @@ export default function ShowTracks() {
     db.collection("Tracks").onSnapshot((res) => {
       arr = [];
       res.forEach((e) => {
-        console.log(e.data());
         let d = {
           id: e.id,
           name: e.data().name,
@@ -53,7 +52,12 @@ export default function ShowTracks() {
     "branch",
     "totalTime",
     "specilization",
-    "Delete",
+    {
+      key: "Delete",
+      label: "",
+      sorter: false,
+      filter: false,
+    },
   ];
 
   return (
@@ -72,6 +76,9 @@ export default function ShowTracks() {
                 size="sm"
                 itemsPerPage={5}
                 pagination
+                columnFilter
+                tableFilter
+                sorter
                 scopedSlots={{
                   Delete: (item) => (
                     <td>
