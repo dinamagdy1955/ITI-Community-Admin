@@ -28,20 +28,23 @@ const AddGroup = () => {
     CreatedDate: new Date(),
   });
 
-  const [track, setTrack] = useState([]);
-  var arr = [];
+  const [imgPrev, setImgPrev] = useState('');
+  const [track, setTrack] = useState([])
+  var arr = []
+
   useEffect(() => {
     getTracks().onSnapshot((res) => {
       res.forEach((e) => {
         arr.push({
           id: e.id,
-          ...e.data(),
-        });
-      });
-      setTrack(arr);
-    });
-  }, []);
-  const [progress, setprogress] = useState(100);
+          ...(e.data())
+        })
+      })
+      setTrack(arr)
+    })
+  }, [])
+  const [progress, setprogress] = useState(100)
+
   const handleForm = async (e) => {
     switch (e.target.name) {
       case "Name":
@@ -80,6 +83,8 @@ const AddGroup = () => {
           });
           prog.then((e) => {
             e.ref.getDownloadURL().then((url) => {
+              setImgPrev(url);
+
               setGroup({
                 ...Group,
                 Img: url,
@@ -153,6 +158,8 @@ const AddGroup = () => {
                 />
               </CCol>
             </CFormGroup>
+            <img src={imgPrev} width="400" className="py-4 w-100" />
+
             <CCardFooter className="mt-3 rounded">
               <div className="text-center">
                 <Link to="/Groups/All">

@@ -175,19 +175,15 @@ const EditGroup = () => {
               ))}
             </CSelect>
 
-            <img src={Group.Img} width="400" className="py-4" />
+            <img src={Group.Img} width="400" className="py-4 w-100" />
             <CFormGroup row>
               <CLabel col md="3" htmlFor="file-input">
                 Change Group Image
               </CLabel>
               <CCol xs="12" md="9">
-                <CInputFile
-                  id="file-input"
-                  name="file-input"
-                  id="img"
-                  name="URL"
-                  onChange={handleForm}
-                />
+
+                <CInputFile id="file-input" name="file-input" id="img" name="URL" onChange={handleForm} className="pt-3" />
+
               </CCol>
             </CFormGroup>
             <CCardFooter className="mt-3 rounded">
