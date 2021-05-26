@@ -28,7 +28,7 @@ const AddGroup = () => {
     Specialty: "",
     CreatedDate: new Date(),
   });
-
+  const [imgPrev, setImgPrev] = useState('');
   const [track, setTrack] = useState([])
   var arr = []
   useEffect(() => {
@@ -42,7 +42,6 @@ const AddGroup = () => {
       setTrack(arr)
     })
   }, [])
-  console.log(track)
   const [progress, setprogress] = useState(100)
   const handleForm = async (e) => {
     switch (e.target.name) {
@@ -81,7 +80,7 @@ const AddGroup = () => {
           })
           prog.then(e => {
             e.ref.getDownloadURL().then((url) => {
-              console.log(url)
+              setImgPrev(url);
               setGroup({
                 ...Group,
                 Img: url,
@@ -140,6 +139,8 @@ const AddGroup = () => {
                 <CInputFile id="file-input" name="file-input" id="img" name="URL" onChange={handleForm} className="pt-2" />
               </CCol>
             </CFormGroup>
+            <img src={imgPrev} width="400" className="py-4 w-100" />
+
             <CCardFooter className="mt-3 rounded">
               <div className="text-center">
                 <Link to="/Groups/All">

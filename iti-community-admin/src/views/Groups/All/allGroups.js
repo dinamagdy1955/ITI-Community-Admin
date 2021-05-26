@@ -209,26 +209,24 @@ export default function AllGroups() {
                       <p className="text-muted">{item.About}</p>
                     </div>
                     <div className="col-6">
-                      <h6>Admins :</h6>
+                      <h6>Members :</h6>
                       <CListGroup className="pb-2">
                         {item.Users.map((e, i) =>
                           i <= 2 ? (
-                            e.Role == 1 && (
-                              <CListGroupItem
-                                className="justify-content-between"
-                                key={i}
-                              >
-                                {e.firstName} {e.lastName}
-                                <span className="float-right  p-0">
-                                  <CButton
-                                    className="p-0 text-danger"
-                                    onClick={() => deleteUser(item.id, e.id)}
-                                  >
-                                    <CIcon name="cil-trash" className="p-0" />
-                                  </CButton>
-                                </span>
-                              </CListGroupItem>
-                            )
+                            <CListGroupItem
+                              className="justify-content-between"
+                              key={i}
+                            >
+                              {e.firstName} {e.lastName}
+                              <span className="float-right  p-0">
+                                <CButton
+                                  className="p-0 text-danger"
+                                  onClick={() => deleteUser(item.id, e.id)}
+                                >
+                                  <CIcon name="cil-trash" className="p-0" />
+                                </CButton>
+                              </span>
+                            </CListGroupItem>
                           ) : (
                             <CListGroupItem
                               className="justify-content-between text-center bg-primary p-0"
@@ -238,7 +236,7 @@ export default function AllGroups() {
                                 onClick={() => setLarge(!large)}
                                 className="text-white btn-block"
                               >
-                                Show All Users
+                                Show All Members
                               </CButton>
                             </CListGroupItem>
                           )
@@ -256,7 +254,7 @@ export default function AllGroups() {
                     </CModalHeader>
                     <CModalBody className="text-left">
                       <select
-                        className="form-select"
+                        className="form-control form-select mb-2"
                         aria-label="Default select example"
                         onChange={showRole}
                       >
@@ -394,7 +392,7 @@ export default function AllGroups() {
                       ))}
                     </CModalBody>
                     <CModalFooter>
-                      <CButton color="danger" onClick={() => setLarge(!large)}>
+                      <CButton color="danger" size="sm" onClick={() => setLarge(!large)}>
                         Close
                       </CButton>
                     </CModalFooter>
