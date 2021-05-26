@@ -11,7 +11,7 @@ import { useHistory } from "react-router";
 import { auth } from "src/firebase";
 import { userDataContext } from "src/userDataContext";
 const TheHeaderDropdown = () => {
-  const { userData, setUserData } = useContext(userDataContext);
+  const { userData } = useContext(userDataContext);
   const history = useHistory();
   function Logout() {
     auth.signOut().then(() => {

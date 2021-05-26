@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { db, auth } from "src/firebase";
+import { db } from "src/firebase";
 import {
   CCard,
   CCardBody,
@@ -11,7 +11,6 @@ import {
   CImg,
 } from "@coreui/react";
 import { useHistory } from "react-router";
-import { Link } from "react-router-dom";
 
 const ShowAdmins = () => {
   const history = useHistory();

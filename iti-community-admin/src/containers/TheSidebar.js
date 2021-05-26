@@ -12,9 +12,6 @@ import {
   CSidebarNavItem,
   CImg,
 } from "@coreui/react";
-
-import CIcon from "@coreui/icons-react";
-
 // sidebar nav config
 import navigation from "./_nav";
 
