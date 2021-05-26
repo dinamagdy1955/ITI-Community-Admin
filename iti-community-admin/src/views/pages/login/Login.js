@@ -8,15 +8,15 @@ import {
   CCol,
   CContainer,
   CForm,
+  CImg,
   CInput,
   CInputGroup,
   CInputGroupPrepend,
   CInputGroupText,
   CRow,
 } from "@coreui/react";
-import { db, auth } from "src/firebase";
+import { auth } from "src/firebase";
 import CIcon from "@coreui/icons-react";
-import { Link } from "react-router-dom";
 const Login = () => {
   const history = useHistory();
   const [admin, setAdmin] = useState({
@@ -42,23 +42,11 @@ const Login = () => {
   };
   const Login = async (event) => {
     try {
-      const { user } = await auth.signInWithEmailAndPassword(
-        admin.email,
-        admin.password
-      );
-      db.collection("admins")
-        .doc(user.uid)
-        .get()
+      await auth
+        .signInWithEmailAndPassword(admin.email, admin.password)
         .then((res) => {
-          if (res.data() != undefined) {
-            if (res.data().isAccepted) {
-              localStorage.setItem("adminUid", user.uid);
-              localStorage.setItem("adminToken", user.refreshToken);
-              history.push("/");
-            } else {
-              alert("Your account is not accepted to login");
-            }
-          }
+          localStorage.setItem("adminToken", res.user.refreshToken);
+          history.push("/dashboard");
         });
     } catch (error) {
       console.log(error);
@@ -126,22 +114,10 @@ const Login = () => {
               >
                 <CCardBody className="text-center">
                   <div>
-                    <h2>Sign up</h2>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua.
-                    </p>
-                    <Link to="/register">
-                      <CButton
-                        color="primary"
-                        className="mt-3"
-                        active
-                        tabIndex={-1}
-                      >
-                        Register Now!
-                      </CButton>
-                    </Link>
+                    <CImg
+                      src="https://firebasestorage.googleapis.com/v0/b/iti-community.appspot.com/o/368-3682543_data-security-icon-emblem-clipart.png?alt=media&token=76162551-5360-4f69-a9f5-e4cdaea0d505"
+                      width="150"
+                    />
                   </div>
                 </CCardBody>
               </CCard>

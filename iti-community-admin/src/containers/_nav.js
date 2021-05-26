@@ -15,8 +15,18 @@ const _nav = [
     _children: [
       {
         _tag: "CSidebarNavItem",
-        name: "Unaccepted Admins",
-        to: "/admins/unaccepted",
+        name: "All Admins",
+        to: "/admins/All",
+      },
+      // {
+      //   _tag: "CSidebarNavItem",
+      //   name: "Unaccepted Admins",
+      //   to: "/admins/unaccepted",
+      // },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Register New Admin",
+        to: "/register",
       },
     ],
   },
@@ -110,33 +120,6 @@ const _nav = [
         _tag: "CSidebarNavItem",
         name: "Add Job",
         to: "/jobs/addjob",
-      },
-    ],
-  },
-  {
-    _tag: "CSidebarNavDropdown",
-    name: "Pages",
-    route: "/pages",
-    _children: [
-      {
-        _tag: "CSidebarNavItem",
-        name: "Login",
-        to: "/login",
-      },
-      {
-        _tag: "CSidebarNavItem",
-        name: "Register",
-        to: "/register",
-      },
-      {
-        _tag: "CSidebarNavItem",
-        name: "Error 404",
-        to: "/404",
-      },
-      {
-        _tag: "CSidebarNavItem",
-        name: "Error 500",
-        to: "/500",
       },
     ],
   },

@@ -37,14 +37,19 @@ const Dashboard = () => {
     <>
       <CRow>
         <CCol xs="12" sm="6" md="4">
-          <CCard color="gradient-success" className="text-white text-center">
-            <CCardHeader className="font-weight-bolder">
-              <h2>Users</h2>
-            </CCardHeader>
-            <CCardBody className="fs-6">
-              <h3>{users}</h3>
-            </CCardBody>
-          </CCard>
+          <Link
+            to="/users/show"
+            style={{ textDecorationLine: "none", color: "black" }}
+          >
+            <CCard color="gradient-success" className="text-white text-center">
+              <CCardHeader className="font-weight-bolder">
+                <h2>Users</h2>
+              </CCardHeader>
+              <CCardBody className="fs-6">
+                <h3>{users}</h3>
+              </CCardBody>
+            </CCard>
+          </Link>
         </CCol>
         <CCol xs="12" sm="6" md="4">
           <Link
@@ -110,19 +115,19 @@ const Dashboard = () => {
           </Link>
         </CCol>
         <CCol xs="12" sm="6" md="4">
-          {/* <Link
-            to="/jobs/showjobs"
+          <Link
+            to="/admins/All"
             style={{ textDecorationLine: "none", color: "white" }}
-          > */}
-          <CCard color="gradient-info" className="text-white text-center">
-            <CCardHeader className="font-weight-bolder">
-              <h2>Admins</h2>
-            </CCardHeader>
-            <CCardBody className="fs-6">
-              <h3>{admins}</h3>
-            </CCardBody>
-          </CCard>
-          {/* </Link> */}
+          >
+            <CCard color="gradient-info" className="text-white text-center">
+              <CCardHeader className="font-weight-bolder">
+                <h2>Admins</h2>
+              </CCardHeader>
+              <CCardBody className="fs-6">
+                <h3>{admins}</h3>
+              </CCardBody>
+            </CCard>
+          </Link>
         </CCol>
       </CRow>
     </>

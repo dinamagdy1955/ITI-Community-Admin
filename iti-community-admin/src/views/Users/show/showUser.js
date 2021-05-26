@@ -149,14 +149,14 @@ const ShowUsers = () => {
                   },
                   details: (item, index) => {
                     return (
-                      <CCollapse show={details.includes(index)}>
+                      <CCollapse key={item.id} show={details.includes(index)}>
                         <CCardBody className="container text-left">
                           <div className="row">
                             <div className="col-3">
                               <h6>Name</h6>
                               <p>{item.name}</p>
                               <h6>Job Title</h6>
-                              <p>
+                              <>
                                 {item.jobTitle == "" ? (
                                   <>
                                     <CImg
@@ -175,7 +175,7 @@ const ShowUsers = () => {
                                 ) : (
                                   item.jobTitle
                                 )}
-                              </p>
+                              </>
                               <h6>About</h6>
                               <div>
                                 {item.about == "" ? (
@@ -282,8 +282,8 @@ const ShowUsers = () => {
                             ) : (
                               item.experiences.map((e, key) => {
                                 return (
-                                  <>
-                                    <div className="d-flex" key={e.id}>
+                                  <div key={e.id}>
+                                    <div className="d-flex">
                                       <div>
                                         <CImg
                                           src="https://firebasestorage.googleapis.com/v0/b/iti-community.appspot.com/o/UsersProfileImages%2Fistockphoto-915109728-612x612.jpg?alt=media&token=211eb9bc-9146-40a7-9778-c1da2b7758e9"
@@ -307,7 +307,7 @@ const ShowUsers = () => {
                                     </div>
 
                                     <hr />
-                                  </>
+                                  </div>
                                 );
                               })
                             )}

@@ -1,5 +1,6 @@
 import React from "react";
 const Dashboard = React.lazy(() => import("./views/dashboard/Dashboard"));
+const Admins = React.lazy(() => import("./views/Admins/All/ShowAdmins"));
 const UnAcceptAdmin = React.lazy(() =>
   import("./views/Admins/unacceptAdmin/unAcceptAdmin")
 );
@@ -34,6 +35,7 @@ const EditJob = React.lazy(() => import("./views/jobs/Edit/EditJob"));
 const routes = [
   { path: "/", exact: true, name: "Home" },
   { path: "/dashboard", name: "Dashboard", component: Dashboard },
+  { path: "/admins/All", name: "Admins", component: Admins },
   { path: "/admins/unaccepted", name: "Admins", component: UnAcceptAdmin },
   { path: "/users/requests", name: "Users", component: requestedUsers },
   {
