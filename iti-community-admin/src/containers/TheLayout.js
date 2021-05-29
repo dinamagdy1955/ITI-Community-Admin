@@ -9,11 +9,8 @@ const TheLayout = () => {
   const location = useLocation();
   console.log(location.pathname);
   if (localStorage.getItem("adminToken") === undefined) history.push("/login");
-  if (
-    localStorage.getItem("adminToken") !== undefined &&
-    location.pathname === "/login#"
-  )
-    history.push("/dashboard");
+  // if (localStorage.getItem("adminToken") !== undefined)
+  //   history.push("/dashboard");
 
   return (
     <div className="c-app c-default-layout">
