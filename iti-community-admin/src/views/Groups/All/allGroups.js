@@ -17,6 +17,7 @@ import {
   CModalFooter,
   CModalHeader,
   CModalTitle,
+  CTooltip,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import React, { useEffect, useState } from "react";
@@ -158,6 +159,7 @@ export default function AllGroups() {
     }
   }
 
+
   return (
     <>
       <CDataTable
@@ -219,12 +221,53 @@ export default function AllGroups() {
                             >
                               {e.firstName} {e.lastName}
                               <span className="float-right  p-0">
-                                <CButton
-                                  className="p-0 text-danger"
-                                  onClick={() => deleteUser(item.id, e.id)}
-                                >
-                                  <CIcon name="cil-trash" className="p-0" />
-                                </CButton>
+                                <CTooltip content="Make Admin">
+
+                                  {e.Role == 1 ? (
+                                    <CButton
+                                      disabled
+                                      className="p-0 text-success mx-3"
+                                      onClick={() => Roles(item.id, e.id, "admin")}
+                                    >
+                                      <CIcon name="cil-user-follow" className="p-0" />
+                                    </CButton>
+                                  ) : (
+                                    <CButton
+                                      className="p-0 text-success mx-3"
+                                      onClick={() => Roles(item.id, e.id, "admin")}
+                                    >
+                                      <CIcon name="cil-user-follow" className="p-0" />
+                                    </CButton>
+                                  )}
+
+                                </CTooltip>
+                                <CTooltip content="Make Member">
+                                  {e.Role == 2 ? (
+                                    <CButton
+                                      disabled
+                                      className="p-0 text-primary mx-3"
+                                      onClick={() => Roles(item.id, e.id, "member")}
+                                    >
+                                      <CIcon name="cil-user" className="p-0" />
+                                    </CButton>
+                                  ) : (
+                                    <CButton
+                                      className="p-0 text-primary mx-3"
+                                      onClick={() => Roles(item.id, e.id, "member")}
+                                    >
+                                      <CIcon name="cil-user" className="p-0" />
+                                    </CButton>
+                                  )}
+                                </CTooltip>
+                                <CTooltip content="Delete">
+                                  <CButton
+                                    className="p-0 text-danger mx-3"
+                                    onClick={() => deleteUser(item.id, e.id)}
+                                  >
+                                    <CIcon name="cil-trash" className="p-0" />
+                                  </CButton>
+                                </CTooltip>
+
                               </span>
                             </CListGroupItem>
                           ) : (
