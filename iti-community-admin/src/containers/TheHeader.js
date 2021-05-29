@@ -16,12 +16,7 @@ import CIcon from "@coreui/icons-react";
 // routes config
 import routes from "../routes";
 
-import {
-  TheHeaderDropdown,
-  TheHeaderDropdownMssg,
-  TheHeaderDropdownNotif,
-  TheHeaderDropdownTasks,
-} from "./index";
+import { TheHeaderDropdown } from "./index";
 
 const TheHeader = () => {
   const dispatch = useDispatch();

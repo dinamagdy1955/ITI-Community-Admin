@@ -1,12 +1,5 @@
-import React, { Component, useEffect, useState } from "react";
-import {
-  BrowserRouter,
-  HashRouter,
-  Route,
-  Switch,
-  useHistory,
-  useLocation,
-} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { BrowserRouter, HashRouter, Route, Switch } from "react-router-dom";
 import "./scss/style.scss";
 import { ContextProvider } from "./userDataContext";
 import UsersRequests from "./views/Users/usersRequests/usersRequests";
@@ -30,7 +23,6 @@ const Page500 = React.lazy(() => import("./views/pages/page500/Page500"));
 function App() {
   const [userData, setUserData] = useState(null);
   let sub1, sub2;
-  const history = useHistory();
   useEffect(async () => {
     sub1 = await auth.onAuthStateChanged(async (res) => {
       if (res != null || res != undefined) {
@@ -56,7 +48,7 @@ function App() {
       } else {
         localStorage.removeItem("adminToken");
         setUserData(null);
-        history.push("/login");
+        // history.push("/login");
       }
     });
     return () => {

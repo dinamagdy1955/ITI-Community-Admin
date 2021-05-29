@@ -5,7 +5,6 @@ import {
   CCol,
   CDataTable,
   CRow,
-  CButton,
 } from "@coreui/react";
 import React, { useEffect } from "react";
 import Button from "react-bootstrap/Button";

@@ -12,26 +12,34 @@ const Dashboard = () => {
   const [branches, setBranches] = useState(0);
   const [jobs, setJobs] = useState(0);
   const [admins, setAdmins] = useState(0);
-
+  let sub1, sub2, sub3, sub4, sub5, sub6;
   useEffect(() => {
-    db.collection("users-basics").onSnapshot((res) => {
+    sub1 = db.collection("users-basics").onSnapshot((res) => {
       setUsers(res.size);
     });
-    db.collection("Groups").onSnapshot((res) => {
+    sub2 = db.collection("Groups").onSnapshot((res) => {
       setGroups(res.size);
     });
-    db.collection("Tracks").onSnapshot((res) => {
+    sub3 = db.collection("Tracks").onSnapshot((res) => {
       setTracks(res.size);
     });
-    db.collection("Branches").onSnapshot((res) => {
+    sub4 = db.collection("Branches").onSnapshot((res) => {
       setBranches(res.size);
     });
-    db.collection("jobs").onSnapshot((res) => {
+    sub5 = db.collection("jobs").onSnapshot((res) => {
       setJobs(res.size);
     });
-    db.collection("admins").onSnapshot((res) => {
+    sub6 = db.collection("admins").onSnapshot((res) => {
       setAdmins(res.size);
     });
+    return () => {
+      sub1();
+      sub2();
+      sub3();
+      sub4();
+      sub5();
+      sub6();
+    };
   }, []);
   return (
     <>

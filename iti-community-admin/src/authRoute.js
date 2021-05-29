@@ -1,4 +1,4 @@
-const { React, Component } = require("react");
+const { Component } = require("react");
 
 class AuthRoute extends Component {
   constructor(props) {
