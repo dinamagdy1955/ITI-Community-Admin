@@ -81,6 +81,7 @@ const ShowUsers = () => {
   };
 
   function DeleteUser(userId) {
+    db.collection("users-basics").doc(userId).delete();
     db.collection("users-details").doc(userId).delete();
   }
 
