@@ -1,8 +1,12 @@
 import React from "react";
+const Login = React.lazy(() => import("./views/pages/login/Login"));
 const Dashboard = React.lazy(() => import("./views/dashboard/Dashboard"));
 const Admins = React.lazy(() => import("./views/Admins/All/ShowAdmins"));
 const UnAcceptAdmin = React.lazy(() =>
   import("./views/Admins/unacceptAdmin/unAcceptAdmin")
+);
+const RegisterAdmin = React.lazy(() =>
+  import("./views/pages/register/Register")
 );
 const requestedUsers = React.lazy(() =>
   import("./views/Users/usersRequests/usersRequests")
@@ -34,9 +38,15 @@ const EditJob = React.lazy(() => import("./views/jobs/Edit/EditJob"));
 
 const routes = [
   { path: "/", exact: true, name: "Home" },
+  { path: "/login", name: "Login", component: Login },
   { path: "/dashboard", name: "Dashboard", component: Dashboard },
   { path: "/admins/All", name: "Admins", component: Admins },
-  { path: "/admins/unaccepted", name: "Admins", component: UnAcceptAdmin },
+  {
+    path: "/admins/unaccepted",
+    name: "unacceptedAdmins",
+    component: UnAcceptAdmin,
+  },
+  { path: "/register", name: "registerAdmins", component: RegisterAdmin },
   { path: "/users/requests", name: "Users", component: requestedUsers },
   {
     path: "/users/deleteReported",

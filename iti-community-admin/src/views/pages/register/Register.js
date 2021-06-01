@@ -98,7 +98,6 @@ const Register = () => {
           });
           prog.then((e) => {
             e.ref.getDownloadURL().then((url) => {
-              console.log(url);
               setAdmin({
                 ...admin,
                 avatar: url,

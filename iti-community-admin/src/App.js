@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter, HashRouter, Route, Switch } from "react-router-dom";
 import "./scss/style.scss";
 import { ContextProvider } from "./userDataContext";
-import UsersRequests from "./views/Users/usersRequests/usersRequests";
 import { db, auth } from "src/firebase";
+import AuthRoute from "src/authRoute";
 
 const loading = (
   <div className="pt-3 text-center">
@@ -16,7 +16,6 @@ const TheLayout = React.lazy(() => import("./containers/TheLayout"));
 
 // Pages
 const Login = React.lazy(() => import("./views/pages/login/Login"));
-const Register = React.lazy(() => import("./views/pages/register/Register"));
 const Page404 = React.lazy(() => import("./views/pages/page404/Page404"));
 const Page500 = React.lazy(() => import("./views/pages/page500/Page500"));
 
@@ -26,29 +25,31 @@ function App() {
   useEffect(async () => {
     sub1 = await auth.onAuthStateChanged(async (res) => {
       if (res != null || res != undefined) {
-        console.log(res);
-        // if (location.pathname == "/login") history.push("/dashboard");
         sub2 = await db
           .collection("admins")
           .doc(res.uid)
           .onSnapshot((user) => {
-            let d = {
-              id: res.uid,
-              firstName: user.data().firstName,
-              lastName: user.data().lastName,
-              avatar: user.data().avatar,
-              email: user.data().email,
-            };
-            if (d.avatar == undefined || d.avatar == null) {
-              d.avatar =
-                "https://firebasestorage.googleapis.com/v0/b/iti-community.appspot.com/o/nav-img.png?alt=media&token=c9c9cc3e-e650-4b5d-a56a-e7db7ba69c36";
+            if (user.exists) {
+              let d = {
+                id: res.uid,
+                firstName: user.data().firstName,
+                lastName: user.data().lastName,
+                avatar: user.data().avatar,
+                email: user.data().email,
+              };
+              if (d.avatar == undefined || d.avatar == null) {
+                d.avatar =
+                  "https://firebasestorage.googleapis.com/v0/b/iti-community.appspot.com/o/nav-img.png?alt=media&token=c9c9cc3e-e650-4b5d-a56a-e7db7ba69c36";
+              }
+              setUserData(d);
+            } else {
+              localStorage.removeItem("adminToken");
+              setUserData(null);
             }
-            setUserData(d);
           });
       } else {
         localStorage.removeItem("adminToken");
         setUserData(null);
-        // history.push("/login");
       }
     });
     return () => {
@@ -61,27 +62,9 @@ function App() {
     <ContextProvider value={{ userData, setUserData }}>
       <HashRouter>
         <React.Suspense fallback={loading}>
-          {/* <AuthRoute> */}
           <BrowserRouter>
             <Switch>
-              <Route
-                exact
-                path="/login"
-                name="Login Page"
-                render={(props) => <Login {...props} />}
-              />
-              <Route
-                exact
-                path="/userReq"
-                name="Login Page"
-                render={(props) => <UsersRequests {...props} />}
-              />
-              <Route
-                exact
-                path="/register"
-                name="Register Page"
-                render={(props) => <Register {...props} />}
-              />
+              <AuthRoute path="/login" component={Login} />
               <Route
                 exact
                 path="/404"
@@ -101,7 +84,6 @@ function App() {
               />
             </Switch>
           </BrowserRouter>
-          {/* </AuthRoute> */}
         </React.Suspense>
       </HashRouter>
     </ContextProvider>

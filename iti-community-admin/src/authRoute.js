@@ -1,10 +1,19 @@
-const { Component } = require("react");
+import React from "react";
+import { Route, Redirect } from "react-router-dom";
 
-class AuthRoute extends Component {
-  constructor(props) {
-    super(props);
-    console.log(props);
-  }
+function AuthRoute({ component: Component, ...rest }) {
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        localStorage.getItem("adminToken") == undefined ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to="/" />
+        )
+      }
+    />
+  );
 }
 
 export default AuthRoute;

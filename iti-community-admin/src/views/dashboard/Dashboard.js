@@ -17,7 +17,7 @@ const Dashboard = () => {
     sub1 = db.collection("users-basics").onSnapshot((res) => {
       setUsers(res.size);
     });
-    sub2 = db.collection("Groups").onSnapshot((res) => {
+    sub2 = db.collection("Groups2").onSnapshot((res) => {
       setGroups(res.size);
     });
     sub3 = db.collection("Tracks").onSnapshot((res) => {

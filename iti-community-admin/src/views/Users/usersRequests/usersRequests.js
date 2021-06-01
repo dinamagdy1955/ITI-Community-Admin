@@ -28,10 +28,6 @@ export default function UsersRequests() {
           db.collection("users-details")
             .doc(e.id)
             .onSnapshot((response) => {
-              // console.log(response);
-              // console.log(response.exists);
-              // console.log(response.data());
-              // console.log(e.data());
               if (response.exists) {
                 let d = {
                   id: e.id,
