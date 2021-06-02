@@ -94,7 +94,7 @@ export default function AllGroups() {
     });
     return () => {
       sub();
-      sub2();
+      // sub2();
     };
   }, []);
 
