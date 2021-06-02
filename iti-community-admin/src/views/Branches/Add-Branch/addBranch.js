@@ -62,7 +62,8 @@ export default function AddBranch() {
   };
 
   const addNew = () => {
-    return db.collection("Branches").add(Branch);
+    db.collection("Branches").add(Branch);
+    history.push("/branches/Show-All");
   };
 
   return (

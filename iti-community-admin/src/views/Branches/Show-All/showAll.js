@@ -53,6 +53,7 @@ export default function ShowAll() {
       label: "",
       sorter: false,
       filter: false,
+      _style: { width: "15%" },
     },
   ];
 

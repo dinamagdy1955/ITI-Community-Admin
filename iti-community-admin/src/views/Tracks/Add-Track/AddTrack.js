@@ -60,9 +60,10 @@ export default function AddTrack() {
         break;
     }
   };
-  const addNew = () => {
-    return db.collection("Tracks").add(Track);
-  };
+  function addNew() {
+    db.collection("Tracks").add(Track);
+    history.push("/tracks/Show-Tracks");
+  }
 
   return (
     <>
@@ -156,7 +157,7 @@ export default function AddTrack() {
               className="w-25 mx-2 mb-2"
               variant="success"
               type="button"
-              onClick={addNew}
+              onClick={() => addNew()}
             >
               Add
             </Button>
