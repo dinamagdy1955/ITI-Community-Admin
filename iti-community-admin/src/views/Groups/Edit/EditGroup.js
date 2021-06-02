@@ -67,7 +67,7 @@ const EditGroup = () => {
       case "Description":
         setGroup({
           ...Group,
-          About: e.target.value,
+          Description: e.target.value,
         });
         break;
       case "Specialty":
