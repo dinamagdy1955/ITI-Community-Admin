@@ -213,8 +213,8 @@ export default function AllGroups() {
                     <div className="col-6">
                       <h6>Members :</h6>
                       <CListGroup className="pb-2">
-                        {item.Users.map((e, i) =>
-                          i <= 2 ? (
+                        {item.Users.length <= 4 ? (
+                          item.Users.map((e, i) =>
                             <CListGroupItem
                               className="justify-content-between"
                               key={i}
@@ -270,19 +270,18 @@ export default function AllGroups() {
 
                               </span>
                             </CListGroupItem>
-                          ) : (
-                            <CListGroupItem
-                              className="justify-content-between text-center bg-primary p-0"
-                              key={i}
-                            >
-                              <CButton
-                                onClick={() => setLarge(!large)}
-                                className="text-white btn-block"
-                              >
-                                Show All Members
-                              </CButton>
-                            </CListGroupItem>
                           )
+                        ) : (
+                          <CListGroupItem
+                            className="justify-content-between text-center bg-primary p-0"
+                          >
+                            <CButton
+                              onClick={() => setLarge(!large)}
+                              className="text-white btn-block"
+                            >
+                              Show All Members
+                          </CButton>
+                          </CListGroupItem>
                         )}
                       </CListGroup>
                     </div>
